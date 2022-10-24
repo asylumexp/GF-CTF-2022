@@ -2,6 +2,8 @@ from GameFrame import RedBot, Globals
 import random
 from enum import Enum
 
+#TEST
+
 class STATE(Enum):
     CHILL = 1
     STRIKE = 2

@@ -44,11 +44,10 @@ class Red1(RedBot):
     def STRIKE(self):
         bot, distance = self.closest_enemy_to_flag()
         angle = int(self.get_rotation_to_coordinate(bot.x,bot.y))
-        if distance<100:
-            self.turn_towards(bot.x, bot.y, Globals.FAST)
-            if abs(angle-self.angle%360)<45:
+        self.turn_towards(bot.x, bot.y, Globals.FAST)
+        if distance<100 and abs(angle-self.angle%360)<45:
                 self.drive_forward(Globals.FAST)
-        if distance>350:
+        if distance>200:
             self.curr_state=STATE.FLAGRETURN
 
     def turntoflag(self):

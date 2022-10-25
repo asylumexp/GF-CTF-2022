@@ -45,7 +45,7 @@ class Red1(RedBot):
         bot, distance = self.closest_enemy_to_flag()
         angle = int(self.get_rotation_to_coordinate(bot.x,bot.y))
         self.turn_towards(bot.x, bot.y, Globals.FAST)
-        if distance<100 and abs(angle-self.angle%360)<45:
+        if distance<100 and abs(angle-self.angle%360)<50:
                 self.drive_forward(Globals.FAST)
         if distance>200:
             self.curr_state=STATE.FLAGRETURN

@@ -3,60 +3,46 @@ from enum import Enum
 
 
 class STATE(Enum):
-    WAIT = 1
-    ATTACK = 2
-    JAIL_BREAK = 3
+    TIANSHUI = 0 #wait
+    PINQLIANG = 2 #bait
+    HANDAN = 1 #strike
+
 
 
 class Red5(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
 
-        self.curr_state = STATE.WAIT
+        self.curr_state = STATE.TIANSHUI
 
     def tick(self):
 
-        if self.curr_state == STATE.WAIT:
-            self.wait()
-        elif self.curr_state == STATE.ATTACK:
-            self.attack()
-        elif self.curr_state == STATE.JAIL_BREAK:
-            self.jailbreak()
-        else:
-            self.curr_state = STATE.RETURN_HOME
+        if self.curr_state == STATE.PINQLIANG:
+            self.PINQLIANG()
+        if self.curr_state == STATE.HANDAN:
+            self.HANDAN()
+        if self.curr_state == STATE.TIANSHUI:
+            self.TIANSHUI()
 
-    def wait(self):
+
+    def PINQLIANG(self):
+        bot, distance = self.closest_enemy_to_bot()
+        if distance < 250:
+            self.curr_state = STATE.HANDAN
+        else:
+                pass
+
+
+
+
+    def HANDAN(self):
         bot, distance = self.closest_enemy_to_flag()
         if distance < 250:
-            self.curr_state = STATE.ATTACK
-        else:
-            bot_jailed = False
-            for team_bot in Globals.red_bots:
-                if team_bot.jailed:
-                    bot_jailed = True
-                    break
-            if bot_jailed:
-                self.curr_state = STATE.JAIL_BREAK
-
-    def attack(self):
-        bot, distance = self.closest_enemy_to_flag()
-        if distance < 250:
-            self.turn_towards(bot.x, bot.y, Globals.FAST)
+            self.turn_towards(bot.x, bot.y, Globals.SLOW)
             self.drive_forward(Globals.FAST)
         else:
-            self.curr_state = STATE.WAIT
+            self.curr_state = STATE.TIANSHUI
 
-    def jailbreak(self):
-        bot_jailed = False
-        for team_bot in Globals.red_bots:
-            if team_bot.jailed:
-                bot_jailed = True
-                break
-        if not bot_jailed:
-            self.curr_state = STATE.WAIT
-        else:
-            self.turn_towards(Globals.SCREEN_WIDTH - 36, Globals.SCREEN_HEIGHT - 40, Globals.FAST)
-            self.drive_forward(Globals.FAST)
 
     def closest_enemy_to_flag(self):
         closest_bot = Globals.blue_bots[0]
@@ -70,3 +56,26 @@ class Red5(RedBot):
                 closest_bot = curr_bot
 
         return closest_bot, shortest_distance
+
+    def closest_enemy_to_bot(self):
+        closest_bot = Globals.blue_bots[0]
+        shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
+                                                         Globals.red_bots[4].x, Globals.red_bots[4].y)
+        for curr_bot in Globals.blue_bots:
+            curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
+                                                         Globals.red_bots[4].x, Globals.red_bots[4].y)
+            if curr_bot_dist < shortest_distance:
+                shortest_distance = curr_bot_dist
+                closest_bot = curr_bot
+
+        return closest_bot, shortest_distance
+
+
+    def TIANSHUI(self):
+        bot, distance = self.closest_enemy_to_bot()
+
+        if distance < 250:
+            self.curr_state = STATE.HANDAN
+        elif distance > 250:
+            self.set_timer(100, self.PINQLIANG)
+            self.curr_state = STATE.PINQLIANG

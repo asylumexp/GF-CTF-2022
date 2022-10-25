@@ -6,6 +6,7 @@ class STATE(Enum):
     TIANSHUI = 0 #wait
     PINQLIANG = 2 #bait
     HANDAN = 1 #strike
+    BAO = 3 #bait dodge
 
 
 
@@ -13,7 +14,7 @@ class Red5(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
 
-        self.curr_state = STATE.TIANSHUI
+        self.curr_state = STATE.PINQLIANG
 
     def tick(self):
 
@@ -26,11 +27,21 @@ class Red5(RedBot):
 
 
     def PINQLIANG(self):
-        bot, distance = self.closest_enemy_to_bot()
-        if distance < 250:
+        bot, distance = self.closest_enemy_to_flag()
+
+        if distance < 150:
             self.curr_state = STATE.HANDAN
         else:
-                pass
+            self.turn_towards(Globals.SCREEN_WIDTH / 2, Globals.SCREEN_HEIGHT, Globals.SLOW)
+            self.drive_forward(Globals.FAST)
+
+        bot, distance = Globals.red_flag.x(), Globals.red_flag.y()
+
+        if distance > 400:
+            self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.SLOW)
+            self.drive_forward(Globals. FAST)
+
+
 
 
 
@@ -72,10 +83,24 @@ class Red5(RedBot):
 
 
     def TIANSHUI(self):
-        bot, distance = self.closest_enemy_to_bot()
-
+        bot, distance = self.closest_enemy_to_flag()
         if distance < 250:
             self.curr_state = STATE.HANDAN
-        elif distance > 250:
-            self.set_timer(100, self.PINQLIANG)
+
+        bot, distance = self.closest_enemy_to_bot()
+        if distance > 250:
             self.curr_state = STATE.PINQLIANG
+
+    def BAO (self):
+        bot, distance = self.closest_enemy_to_bot()
+        closest_bot = Globals.blue_bots[0]
+        shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
+                                                         Globals.red_bots[4].x, Globals.red_bots[4].y)
+
+        if self.curr_state == STATE.PINQLAING and distance > 150:
+            self.turn_towards(closest_bot.x *-1 / shortest_distance, closest_bot.y *-1 / shortest_distance, Globals.SLOW)
+            self.drive_forward(Globals.FAST)
+
+        else:
+            self.curr_state = STATE.PINQLIANG
+

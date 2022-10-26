@@ -14,6 +14,13 @@ class Red1(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
         self.curr_state=STATE.FLAGRETURN
+        self.attacking = {
+            "attacking1": [False, None],
+            "attacking2": [False, None],
+            "attacking3": [False, None],
+            "attacking4": [False, None],
+            "attacking5": [False, None]
+        }
 
     def tick(self):
         if self.curr_state == STATE.FLAGRETURN:

@@ -14,6 +14,13 @@ class Red1(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
         self.curr_state=STATE.FLAGRETURN
+        self.attacking = {
+            "attacking1": [False, None],
+            "attacking2": [False, None],
+            "attacking3": [False, None],
+            "attacking4": [False, None],
+            "attacking5": [False, None]
+        }
 
     def tick(self):
         if self.curr_state == STATE.FLAGRETURN:
@@ -43,6 +50,9 @@ class Red1(RedBot):
 
     def STRIKE(self):
         bot, distance = self.closest_enemy_to_flag()
+        Globals.red_bots[0].attacking["attacking1"][1] = bot
+        bots = [attack for attack, seq in Globals.red_bots[0].attacking.items() if bot in seq]
+        print(bots)
         angle = int(self.get_rotation_to_coordinate(bot.x,bot.y))
         self.turn_towards(bot.x, bot.y, Globals.FAST)
         if distance<100 and abs(angle-self.angle%360)<70:

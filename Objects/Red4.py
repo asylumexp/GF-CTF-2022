@@ -29,6 +29,10 @@ class Red4(RedBot):
 
     def attack(self):
         bot, distance = self.closest_enemy_to_flag()
+        Globals.red_bots[0].attacking["attacking4"][1] = bot
+        bots = [attack for attack, seq in Globals.red_bots[0].attacking.items() if bot in seq]
+        print(bots)
+
         if distance < 250:
             self.turn_towards(bot.x, bot.y, Globals.FAST)
             self.drive_forward(Globals.FAST)

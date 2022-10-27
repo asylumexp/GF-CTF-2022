@@ -24,6 +24,7 @@ class Red5(RedBot):
             self.HANDAN()
         if self.curr_state == STATE.TIANSHUI:
             self.TIANSHUI()
+        print(self.x, self.y)
 
 
     def PINQLIANG(self):
@@ -48,7 +49,9 @@ class Red5(RedBot):
 
     def HANDAN(self):
         bot, distance = self.closest_enemy_to_flag()
-        if distance < 250:
+        Globals.red_bots[4].x = self.x
+        Globals.red_bots[4].y = self.y
+        if distance < 250 and self.x == 255 and self.y == 255:
             self.turn_towards(bot.x, bot.y, Globals.SLOW)
             self.drive_forward(Globals.FAST)
         else:
@@ -67,6 +70,10 @@ class Red5(RedBot):
                 closest_bot = curr_bot
 
         return closest_bot, shortest_distance
+
+    def wether_in_enemy(self):
+
+
 
     def closest_enemy_to_bot(self):
         closest_bot = Globals.blue_bots[0]

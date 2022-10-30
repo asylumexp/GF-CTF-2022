@@ -6,6 +6,8 @@ class STATE(Enum):
     WAIT = 1
     ATTACK = 2
     FLAG = 3
+    PREPARE = 4
+    BAIT = 5
 
 
 class Red4(RedBot):
@@ -21,20 +23,31 @@ class Red4(RedBot):
             self.attack()
         elif self.curr_state == STATE.FLAG:
             self.flag()
+        elif self.curr_state == STATE.PREPARE:
+            self.prepare()
+        elif self.curr_state == STATE.BAIT:
+            self.bait()
         else:
             self.curr_state = STATE.WAIT
-
+    # 
     def wait(self):
         bot, distance = self.closest_enemy_to_flag()
         #Stay and or move close to the top border
-        
-        # Check for enemies
-        if distance < 250:
-            self.curr_state = STATE.ATTACK
-        #Wait for Bait
+        if self.x <= 644 or self.x >= 656:
+            self.turn_towards(650, 50, Globals.FAST)
+            self.drive_forward(Globals.FAST)
+        # todo Check for enemies
+        # if distance < 250 and bot.x > 650:
+        #     self.curr_state = STATE.ATTACK
+        # todo Wait for Bait
         else:
-            self.curr_state = STATE.FLAG
+            print("else")
+            # * self.curr_state = STATE.FLAG
     
+    def prepare(self):
+        Globals.red_bots[0].red4ready = True
+        if Globals.red_bots[0].red3ready == True and Globals.red_bots[0].red5ready == True:
+            self.curr_state = STATE.BAIT
     def bait():
         #move across border, evading enemies
         

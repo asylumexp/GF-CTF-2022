@@ -55,7 +55,7 @@ class Red3(RedBot):
         if not bot_jailed:
             self.curr_state = STATE.WAIT
         else:
-            self.turn_towards(1260, 690, Globals.FAST)
+            self.turn_towards(1280, 720, Globals.FAST)
             self.drive_forward(Globals.FAST)
 
     def closest_enemy_to_flag(self):

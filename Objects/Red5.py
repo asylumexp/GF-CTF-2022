@@ -72,7 +72,7 @@ class Red5(RedBot):
         return closest_bot, shortest_distance
 
     def wether_in_enemy(self):
-
+        pass
 
 
     def closest_enemy_to_bot(self):

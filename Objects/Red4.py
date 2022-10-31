@@ -120,22 +120,24 @@ class Red4(RedBot):
     def closest_enemy_to_self(self, ignore):
         # todo - make more efficient
         closest_bot = Globals.blue_bots[0]
-        closer_bot = Globals.red_bots[0]
-        shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
-                                                         self.x, self.y)
-        # * Closer teammate to blue bot
-        closer_dist = self.point_to_point_distance(closest_bot.x, closest_bot.y,
-                                                         closer_bot.x, closer_bot.y)
+        closer_bot = Globals.red_bots[0] 
         for curr_bot in Globals.blue_bots:
             curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
                                                          Globals.blue_flag.x, Globals.blue_flag.y)
             for red_bot in Globals.red_bots:
                 closer_bot = red_bot
+                # * get distance teammate to enemy
                 closer_dist = self.point_to_point_distance(closest_bot.x, closest_bot.y,
                                                          closer_bot.x, closer_bot.y)
-                if curr_bot_dist < shortest_distance :
-                    shortest_distance = curr_bot_dist
-                    closest_bot = curr_bot
+                # * check enemy distance from self to bot from loop
+                if curr_bot_dist < shortest_distance:
+                    # * check if teammate is closer
+                    if closer_dist < curr_bot_dist and not ignore:
+                        shortest_distance = curr_bot_dist
+                        closest_bot = curr_bot
+                    elif ignore:
+                        shortest_distance = curr_bot_dist
+                        closest_bot = curr_bot
 
         return closest_bot, shortest_distance
     

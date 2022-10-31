@@ -14,43 +14,43 @@ class Red5(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
 
-        self.curr_state = STATE.PINQLIANG
+
+        self.curr_state = STATE.TIANSHUI
 
     def tick(self):
+        print(self.curr_state)
 
         if self.curr_state == STATE.PINQLIANG:
             self.PINQLIANG()
-        if self.curr_state == STATE.HANDAN:
+        elif self.curr_state == STATE.HANDAN:
             self.HANDAN()
-        if self.curr_state == STATE.TIANSHUI:
+        elif self.curr_state == STATE.TIANSHUI:
             self.TIANSHUI()
-        print(self.x, self.y)
+        else:
+            self.curr_state = STATE.PINQLIANG
+
 
 
     def PINQLIANG(self):
-        bot, distance = self.closest_enemy_to_flag()
-
-        if distance < 150:
+        distance = self.point_to_point_distance(self.x, self.y, Globals.blue_bots[0].x, Globals.blue_bots[0].y)
+        if distance < 250:
             self.curr_state = STATE.HANDAN
+
+        #inital bait movement waiting for other bots to be ready
+
+        ready3, ready4 = self.checkReady()
+        if ready3 and ready4:
+            self.bot5ready = True
+            self.curr_state = STATE.BAO
+
         else:
             self.turn_towards(Globals.SCREEN_WIDTH / 2, Globals.SCREEN_HEIGHT, Globals.SLOW)
-            self.drive_forward(Globals.FAST)
-
-        bot, distance = Globals.red_flag.x(), Globals.red_flag.y()
-
-        if distance > 400:
-            self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.SLOW)
-            self.drive_forward(Globals. FAST)
-
-
-
-
+            self.drive_forward(Globals.SLOW)
+            self.curr_state = STATE.TIANSHUI
 
 
     def HANDAN(self):
         bot, distance = self.closest_enemy_to_flag()
-        Globals.red_bots[4].x = self.x
-        Globals.red_bots[4].y = self.y
         if distance < 250 and self.x == 255 and self.y == 255:
             self.turn_towards(bot.x, bot.y, Globals.SLOW)
             self.drive_forward(Globals.FAST)
@@ -71,15 +71,21 @@ class Red5(RedBot):
 
         return closest_bot, shortest_distance
 
-    def wether_in_enemy(self):
+
+
+
+    def bot_ready_check(self):
+        return Globals.red_bots[0].bot_ready
 
 
 
     def closest_enemy_to_bot(self):
         closest_bot = Globals.blue_bots[0]
+
         shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
                                                          Globals.red_bots[4].x, Globals.red_bots[4].y)
         for curr_bot in Globals.blue_bots:
+
             curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
                                                          Globals.red_bots[4].x, Globals.red_bots[4].y)
             if curr_bot_dist < shortest_distance:
@@ -94,20 +100,16 @@ class Red5(RedBot):
         if distance < 250:
             self.curr_state = STATE.HANDAN
 
-        bot, distance = self.closest_enemy_to_bot()
-        if distance > 250:
+        else:
             self.curr_state = STATE.PINQLIANG
 
     def BAO (self):
-        bot, distance = self.closest_enemy_to_bot()
-        closest_bot = Globals.blue_bots[0]
-        shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
-                                                         Globals.red_bots[4].x, Globals.red_bots[4].y)
+       pass
 
-        if self.curr_state == STATE.PINQLAING and distance > 150:
-            self.turn_towards(closest_bot.x *-1 / shortest_distance, closest_bot.y *-1 / shortest_distance, Globals.SLOW)
-            self.drive_forward(Globals.FAST)
+        # WAITING ON CHARLIE OR SAMES EVADE CODE TO FINISH
 
-        else:
-            self.curr_state = STATE.PINQLIANG
+
+
+    def checkReady(self):
+        return Globals.red_bots[0].red3ready, Globals.red_bots[0].red4ready
 

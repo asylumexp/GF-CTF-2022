@@ -48,14 +48,14 @@ class Red3(RedBot):
 
     def jailbreak(self):
         bot_jailed = False
-        for team_bot in Globals.blue_bots:
+        for team_bot in Globals.red_bots:
             if team_bot.jailed:
                 bot_jailed = True
                 break
         if not bot_jailed:
             self.curr_state = STATE.WAIT
         else:
-            self.turn_towards(1280, 720, Globals.FAST)
+            self.turn_towards(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT, Globals.FAST)
             self.drive_forward(Globals.FAST)
 
     def closest_enemy_to_flag(self):

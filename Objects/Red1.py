@@ -17,6 +17,7 @@ class Red1(RedBot):
         self.red4ready = False
 
     def tick(self):
+
         if self.curr_state == STATE.FLAGRETURN:
             self.flagreturn()
         if self.curr_state == STATE.CHILL:
@@ -44,9 +45,9 @@ class Red1(RedBot):
 
     def STRIKE(self):
         bot, distance = self.closest_enemy_to_flag()
-        angle = int(self.get_rotation_to_coordinate(bot.x,bot.y))
+        angle = self.angleRelative(bot.x,bot.y)
         self.turn_towards(bot.x, bot.y, Globals.FAST)
-        if distance<100 and abs(angle-self.angle%360)<70:
+        if distance<100 and angle<70:
                 self.drive_forward(Globals.FAST)
         if distance>100:
             self.curr_state=STATE.FLAGRETURN
@@ -66,5 +67,13 @@ class Red1(RedBot):
                 closest_bot = curr_bot
 
         return closest_bot, shortest_distance
+    def angleRelative(self,x,y):
+        angle=self.NormalizedAngle(x,y)
+        diffangle=min(abs(self.angle-angle),360-abs(self.angle-angle))
+        return diffangle
+    def NormalizedAngle(self,x,y):
+        angle = self.get_rotation_to_coordinate(x,y)
+        if angle<0: angle+=360
+        return angle
 
 

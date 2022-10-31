@@ -21,6 +21,11 @@ class Red1(RedBot):
             "attacking4": [False, None],
             "attacking5": [False, None]
         }
+        self.bot3ready = False
+        self.bot4ready = False
+        self.bot5ready = False
+
+
 
     def tick(self):
         if self.curr_state == STATE.FLAGRETURN:
@@ -75,5 +80,6 @@ class Red1(RedBot):
                 closest_bot = curr_bot
 
         return closest_bot, shortest_distance
+
 
 

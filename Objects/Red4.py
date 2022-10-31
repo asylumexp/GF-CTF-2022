@@ -48,11 +48,12 @@ class Red4(RedBot):
         Globals.red_bots[0].red4ready = True
         if Globals.red_bots[0].red3ready == True and Globals.red_bots[0].red5ready == True:
             self.curr_state = STATE.BAIT
-    def bait():
+    def bait(self):
+        bot, distance = self.closest_enemy_to_flag()
         #move across border, evading enemies
-        
+        self.turn_towards(0, 20, Globals.FAST)
         # keep enemies away from bot three
-        
+        self.evadeBots()
         #if no enemies are attacking self
         pass
     

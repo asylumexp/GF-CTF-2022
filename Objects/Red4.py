@@ -50,12 +50,14 @@ class Red4(RedBot):
             self.curr_state = STATE.BAIT
     def bait(self):
         bot, distance = self.closest_enemy_to_flag()
-        #move across border, evading enemies
+        # ? move across border, evading enemies
         self.turn_towards(0, 20, Globals.FAST)
-        # keep enemies away from bot three
-        self.evadeBots()
-        #if no enemies are attacking self
-        pass
+        # todo keep enemies away from bot three
+        if distance < 250:
+            self.evadeBots()
+        # todo if no enemies are attacking self
+        else:
+            self.flag()
     
     def attackFLAG():
         #evade enemies
@@ -108,11 +110,35 @@ class Red4(RedBot):
         for curr_bot in Globals.blue_bots:
             curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
                                                          Globals.blue_flag.x, Globals.blue_flag.y)
+            
             if curr_bot_dist < shortest_distance:
                 shortest_distance = curr_bot_dist
                 closest_bot = curr_bot
 
         return closest_bot, shortest_distance
+    
+    def closest_enemy_to_self(self, ignore):
+        # todo - make more efficient
+        closest_bot = Globals.blue_bots[0]
+        closer_bot = Globals.red_bots[0]
+        shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
+                                                         self.x, self.y)
+        # * Closer teammate to blue bot
+        closer_dist = self.point_to_point_distance(closest_bot.x, closest_bot.y,
+                                                         closer_bot.x, closer_bot.y)
+        for curr_bot in Globals.blue_bots:
+            curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
+                                                         Globals.blue_flag.x, Globals.blue_flag.y)
+            for red_bot in Globals.red_bots:
+                closer_bot = red_bot
+                closer_dist = self.point_to_point_distance(closest_bot.x, closest_bot.y,
+                                                         closer_bot.x, closer_bot.y)
+                if curr_bot_dist < shortest_distance :
+                    shortest_distance = curr_bot_dist
+                    closest_bot = curr_bot
+
+        return closest_bot, shortest_distance
+    
     def flag(self):
         if self.has_flag:
             self.turn_towards(Globals.SCREEN_WIDTH, self.y)

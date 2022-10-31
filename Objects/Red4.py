@@ -15,6 +15,7 @@ class Red4(RedBot):
         RedBot.__init__(self, room, x, y)
         self.set_image("Images/master.png", 25, 25)
         self.curr_state = STATE.WAIT
+        self.prev_x_enemy = 0
 
     def tick(self):
         if self.curr_state == STATE.WAIT:
@@ -55,43 +56,44 @@ class Red4(RedBot):
         # todo keep enemies away from bot three
         if distance < 250:
             self.evadeBots()
-        # todo if no enemies are attacking self
+        # * if no enemies are attacking self
         else:
-            self.flag()
+            self.attackFLAG()
     
-    def attackFLAG():
-        #evade enemies
+    def attackFLAG(self):
+        # todo - evade enemies
         
-        #move to flag
+        # todo - move to flag
         
-        #return with flag
+        # todo - return with flag
         
-        #if tagged
+        # todo - if tagged
         pass
     
     def jailed():
-        #if jailbroken
+        # todo - if jailbroken
         pass
     
     def gohome():
-        #move to upper position
+        # todo - move to upper position
         
-        #if enemies are nearby
+        # todo - if enemies are nearby
         pass
     
     def attack():
-        #attack bots
+        # todo - attack bots
         
-        #return to previous function
+        # todo - return to previous function
         pass
     
     """
     Helper Functions
     """
     
-    def evadeBots():
-        #evade bot
-        pass
+    def evadeBots(self):
+        # todo - evade bot
+        bot, dist = self.closest_enemy_to_self(True)
+        
         
         
 
@@ -123,16 +125,14 @@ class Red4(RedBot):
         closer_bot = Globals.red_bots[0] 
         for curr_bot in Globals.blue_bots:
             curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
-                                                         Globals.blue_flag.x, Globals.blue_flag.y)
+                                                         self.x, self.y)
             for red_bot in Globals.red_bots:
-                closer_bot = red_bot
-                # * get distance teammate to enemy
-                closer_dist = self.point_to_point_distance(closest_bot.x, closest_bot.y,
-                                                         closer_bot.x, closer_bot.y)
                 # * check enemy distance from self to bot from loop
                 if curr_bot_dist < shortest_distance:
+                    curr_teammate_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
+                                                         self.x, self.y)
                     # * check if teammate is closer
-                    if closer_dist < curr_bot_dist and not ignore:
+                    if curr_teammate_dist < curr_bot_dist and not ignore:
                         shortest_distance = curr_bot_dist
                         closest_bot = curr_bot
                     elif ignore:

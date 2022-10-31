@@ -43,6 +43,7 @@ class Red4(RedBot):
         # todo Wait for Bait
         else:
             print("else")
+            self.curr_state = STATE.BAIT
             # * self.curr_state = STATE.FLAG
     
     def prepare(self):
@@ -93,6 +94,23 @@ class Red4(RedBot):
     def evadeBots(self):
         # todo - evade bot
         bot, dist = self.closest_enemy_to_self(True)
+        startMOVING = False
+        if self.curr_rotation <= bot.curr_rotation + 9 and self.curr_rotation >= bot.curr_rotation - 9:
+            startMOVING = True
+        elif self.curr_rotation <= 180:
+            if self.curr_rotation + 2 < bot.curr_rotation < self.curr_rotation + 180:
+                self.turn_left(Globals.FAST)
+            else:
+                self.turn_right(Globals.FAST)
+        else:
+            if self.curr_rotation + 2 < bot.curr_rotation < 360 or 0 <= bot.curr_rotation < self.curr_rotation - 180:
+                self.turn_left(Globals.FAST)
+            else:
+                self.turn_right(Globals.FAST)
+        if startMOVING == True:
+            self.drive_forward(Globals.FAST)
+            
+             
         
         
         
@@ -123,6 +141,8 @@ class Red4(RedBot):
         # todo - make more efficient
         closest_bot = Globals.blue_bots[0]
         closer_bot = Globals.red_bots[0] 
+        shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
+                                                         self.x, self.y)
         for curr_bot in Globals.blue_bots:
             curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
                                                          self.x, self.y)

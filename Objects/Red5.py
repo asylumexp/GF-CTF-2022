@@ -3,6 +3,7 @@ from enum import Enum
 
 
 class STATE(Enum):
+
     TIANSHUI = 0 #wait
     PINQLIANG = 2 #bait
     HANDAN = 1 #strike
@@ -15,7 +16,7 @@ class Red5(RedBot):
         RedBot.__init__(self, room, x, y)
         self.set_image("Images/batman2.png", 25, 25)
         self.curr_state = STATE.TIANSHUI
-
+        #boatman!!
     def tick(self):
         print(self.curr_state)
 

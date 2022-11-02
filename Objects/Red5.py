@@ -3,7 +3,6 @@ from enum import Enum
 
 
 class STATE(Enum):
-
     TIANSHUI = 0 #wait
     PINQLIANG = 2 #bait
     HANDAN = 1 #strike

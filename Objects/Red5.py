@@ -13,10 +13,9 @@ class STATE(Enum):
 class Red5(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
-
-
+        self.set_image("Images/batman2.png", 25, 25)
         self.curr_state = STATE.TIANSHUI
-
+        #boatman!!
     def tick(self):
         # print(self.curr_state)
 
@@ -34,27 +33,31 @@ class Red5(RedBot):
     def PINQLIANG(self):
         distance = self.point_to_point_distance(self.x, self.y, Globals.blue_bots[0].x, Globals.blue_bots[0].y)
         if distance < 250:
+            Globals.red_bots[0].bot5ready = False
             self.curr_state = STATE.HANDAN
+        elif not self.x >= 635 or not self.x <= 650:
+            print("bot 5 moving")
+            self.turn_towards(650, 80, Globals.FAST)
+            self.drive_forward(Globals.FAST)
+        elif self.x >= 490 and self.x <= 495:
+            Globals.red_bots[0].bot5ready = True
+            print("bot 5 ready")
 
         #inital bait movement waiting for other bots to be ready
 
-        ready3, ready4 = self.checkReady()
-        if ready3 and ready4:
-            self.bot5ready = True
+        ready3, ready4, ready5 = self.checkReady()
+        if ready3 and ready4 and ready5:
             self.curr_state = STATE.BAO
 
-        else:
-            self.turn_towards(Globals.SCREEN_WIDTH / 2, Globals.SCREEN_HEIGHT, Globals.SLOW)
-            self.drive_forward(Globals.SLOW)
-            self.curr_state = STATE.TIANSHUI
 
 
     def HANDAN(self):
-        bot, distance = self.closest_enemy_to_flag()
-        if distance < 250 and self.x == 255 and self.y == 255:
-            self.turn_towards(bot.x, bot.y, Globals.SLOW)
-            self.drive_forward(Globals.FAST)
-        else:
+        bot, distance = self.closest_enemy_to_bot()
+        angle = self.angleRelative(bot.x,bot.y)
+        self.turn_towards(bot.x, bot.y, Globals.SLOW)
+        if distance<100 and angle<70:
+                self.drive_forward(Globals.FAST)
+        if distance>100:
             self.curr_state = STATE.TIANSHUI
 
 
@@ -96,7 +99,7 @@ class Red5(RedBot):
 
 
     def TIANSHUI(self):
-        bot, distance = self.closest_enemy_to_flag()
+        bot, distance = self.closest_enemy_to_bot()
         if distance < 250:
             self.curr_state = STATE.HANDAN
 
@@ -104,12 +107,29 @@ class Red5(RedBot):
             self.curr_state = STATE.PINQLIANG
 
     def BAO (self):
-       pass
+        bot = Globals.red_flag()
+        angle = self.angleRelative(bot.x, bot.y)
+        self.turn_towards(bot.x, bot.y, Globals.SLOW)
+        if angle <= 70:
+                self.drive_forward(Globals.FAST)
+        elif angle >= 70:
+            self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
 
-        # WAITING ON CHARLIE OR SAMES EVADE CODE TO FINISH
+
+        # WAITING ON CHARLIE OR SAMS EVADE CODE TO FINISH
 
 
 
     def checkReady(self):
-        return Globals.red_bots[0].bot3ready, Globals.red_bots[0].bot4ready
+        return Globals.red_bots[0].bot3ready, Globals.red_bots[0].bot4ready, Globals.red_bots[0].bot5ready
+
+    def angleRelative(self,x,y):
+        angle=self.NormalizedAngle(x,y)
+        diffangle=min(abs(self.angle-angle),360-abs(self.angle-angle))
+        return diffangle
+
+    def NormalizedAngle(self,x,y):
+        angle = self.get_rotation_to_coordinate(x,y)
+        if angle<0: angle+=360
+        return angle
 

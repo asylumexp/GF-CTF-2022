@@ -79,6 +79,7 @@ class Red5(RedBot):
 
     def bot_ready_check(self):
         return Globals.red_bots[0].bot_ready
+    #it works now
 
 
 

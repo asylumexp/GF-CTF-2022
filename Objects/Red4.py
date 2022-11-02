@@ -8,6 +8,8 @@ class STATE(Enum):
     FLAG = 3
     PREPARE = 4
     BAIT = 5
+    JAIL = 6
+    HOME = 7
 
 
 class Red4(RedBot):
@@ -28,6 +30,10 @@ class Red4(RedBot):
             self.prepare()
         elif self.curr_state == STATE.BAIT:
             self.bait()
+        elif self.curr_state == STATE.JAIL:
+            self.jailedf()
+        elif self.curr_state == STATE.HOME:
+            self.gohome()
         else:
             self.curr_state = STATE.WAIT
     # 
@@ -41,6 +47,7 @@ class Red4(RedBot):
         # if distance < 250 and bot.x > 650:
         #     self.curr_state = STATE.ATTACK
         # todo Wait for Bait
+        
         else:
             print("else")
             self.curr_state = STATE.BAIT
@@ -48,12 +55,15 @@ class Red4(RedBot):
     
     def prepare(self):
         Globals.red_bots[0].red4ready = True
-        if Globals.red_bots[0].red3ready == True and Globals.red_bots[0].red5ready == True:
+        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].red5ready:
             self.curr_state = STATE.BAIT
+
     def bait(self):
+        if self.jailed:
+            self.curr_state = STATE.JAIL
         bot, distance = self.closest_enemy_to_flag()
         # ? move across border, evading enemies
-        self.turn_towards(0, 20, Globals.FAST)
+        self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
         # todo keep enemies away from bot three
         if distance < 250:
             self.evadeBots()
@@ -62,26 +72,27 @@ class Red4(RedBot):
             self.attackFLAG()
     
     def attackFLAG(self):
+        # * If tagged:
+        if self.jailed:
+            self.curr_state = STATE.JAIL
         # todo - evade enemies
-        
+        self.evadeBots()
         # todo - move to flag
-        
         # todo - return with flag
-        
-        # todo - if tagged
-        pass
+        self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
+        self.drive_forward(Globals.FAST)
+
     
-    def jailed():
+    def jailedf(self):
         # todo - if jailbroken
-        pass
+        if not self.jailed:
+            self.curr_state = STATE.returnHome
     
-    def gohome():
+    def gohome(self):
         # todo - move to upper position
-        
-        # todo - if enemies are nearby
-        pass
+        self.curr_state = STATE.WAIT
     
-    def attack():
+    def attack(self):
         # todo - attack bots
         
         # todo - return to previous function
@@ -92,23 +103,24 @@ class Red4(RedBot):
     """
     
     def evadeBots(self):
-        # todo - evade bot
-        bot, dist = self.closest_enemy_to_self(True)
-        startMOVING = False
-        if self.curr_rotation <= bot.curr_rotation + 9 and self.curr_rotation >= bot.curr_rotation - 9:
-            startMOVING = True
-        elif self.curr_rotation <= 180:
-            if self.curr_rotation + 2 < bot.curr_rotation < self.curr_rotation + 180:
-                self.turn_left(Globals.FAST)
-            else:
-                self.turn_right(Globals.FAST)
-        else:
-            if self.curr_rotation + 2 < bot.curr_rotation < 360 or 0 <= bot.curr_rotation < self.curr_rotation - 180:
-                self.turn_left(Globals.FAST)
-            else:
-                self.turn_right(Globals.FAST)
-        if startMOVING == True:
-            self.drive_forward(Globals.FAST)
+        pass
+        # # todo - evade bot
+        # bot, dist = self.closest_enemy_to_self(True)
+        # startMOVING = False
+        # if self.curr_rotation <= bot.curr_rotation + 9 and self.curr_rotation >= bot.curr_rotation - 9:
+        #     startMOVING = True
+        # elif self.curr_rotation <= 180:
+        #     if self.curr_rotation + 2 < bot.curr_rotation < self.curr_rotation + 180:
+        #         self.turn_left(Globals.FAST)
+        #     else:
+        #         self.turn_right(Globals.FAST)
+        # else:
+        #     if self.curr_rotation + 2 < bot.curr_rotation < 360 or 0 <= bot.curr_rotation < self.curr_rotation - 180:
+        #         self.turn_left(Globals.FAST)
+        #     else:
+        #         self.turn_right(Globals.FAST)
+        # if startMOVING == True:
+        #     self.drive_forward(Globals.FAST)
             
              
         

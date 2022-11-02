@@ -18,7 +18,7 @@ class Red5(RedBot):
         self.curr_state = STATE.TIANSHUI
 
     def tick(self):
-        print(self.curr_state)
+        # print(self.curr_state)
 
         if self.curr_state == STATE.PINQLIANG:
             self.PINQLIANG()

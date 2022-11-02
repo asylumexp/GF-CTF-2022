@@ -111,5 +111,5 @@ class Red5(RedBot):
 
 
     def checkReady(self):
-        return Globals.red_bots[0].red3ready, Globals.red_bots[0].red4ready
+        return Globals.red_bots[0].bot3ready, Globals.red_bots[0].bot4ready
 

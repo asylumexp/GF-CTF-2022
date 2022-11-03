@@ -54,8 +54,8 @@ class Red3(RedBot):
             # * self.curr_state = STATE.FLAG
     
     def prepare(self):
-        Globals.red_bots[0].red3ready = True
-        if Globals.red_bots[0].bot4ready and Globals.red_bots[0].red5ready:
+        Globals.red_bots[0].bot3ready = True
+        if Globals.red_bots[0].bot4ready and Globals.red_bots[0].bot5ready:
             self.curr_state = STATE.BAIT
 
     def bait(self):

@@ -39,13 +39,14 @@ class Red5(RedBot):
             print("bot 5 moving")
             self.turn_towards(650, 80, Globals.FAST)
             self.drive_forward(Globals.FAST)
-        elif self.x >= 490 and self.x <= 495:
+        elif self.x >= 635 and self.x <= 650:
             Globals.red_bots[0].bot5ready = True
             print("bot 5 ready")
 
         #inital bait movement waiting for other bots to be ready
 
         ready3, ready4, ready5 = self.checkReady()
+        print(ready3, ready4, ready5)
         if ready3 and ready4 and ready5:
             self.curr_state = STATE.BAO
 

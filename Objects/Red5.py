@@ -8,6 +8,7 @@ class STATE(Enum):
     PINQLIANG = 2 #bait
     HANDAN = 1 #strike
     BAO = 3 #bait dodge
+    EVADE = 5 #exactly what the state says
 
 
 
@@ -28,6 +29,8 @@ class Red5(RedBot):
             self.TIANSHUI()
         elif self.curr_state == STATE.BAIT_TRUE:
             self.BAIT_TRUE()
+        elif self.curr_state == STATE.EVADE:
+            self.EVADE()
         else:
             self.curr_state = STATE.PINQLIANG
 
@@ -104,18 +107,20 @@ class Red5(RedBot):
             self.curr_state = STATE.PINQLIANG
 
     def BAO (self):
-        bot = Globals.red_flag()
-        angle = self.angleRelative(bot.x, bot.y)
-        self.turn_towards(bot.x, bot.y, Globals.SLOW)
-        if angle <= 70:
-                self.drive_forward(Globals.FAST)
-        elif angle >= 70:
+        distance = self.point_to_point_distance(self.x, self.y, self.closest_enemy_to_bot.x, self.closest_enemy_to_bot.y)
+        if distance < 200:
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
+            self.drive_forward(Globals.FAST)
+        else:
+            self.curr_state = STATE.EVADE()
 
 
-        # WAITING ON CHARLIE OR SAMS EVADE CODE TO FINISH
 
 
+
+    def EVADE(self):
+             # WAITING ON CHARLIE OR SAMS EVADE CODE TO FINISH
+        pass
 
     def checkReady(self):
         return Globals.red_bots[0].bot3ready, Globals.red_bots[0].bot4ready, Globals.red_bots[0].bot5ready

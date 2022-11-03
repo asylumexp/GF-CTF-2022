@@ -50,7 +50,7 @@ class Red4(RedBot):
         
         else:
             print("else")
-            self.curr_state = STATE.BAIT
+            self.curr_state = STATE.PREPARE
             # * self.curr_state = STATE.FLAG
     
     def prepare(self):

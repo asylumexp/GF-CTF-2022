@@ -50,12 +50,12 @@ class Red4(RedBot):
         
         else:
             print("else")
-            self.curr_state = STATE.BAIT
+            self.curr_state = STATE.PREPARE
             # * self.curr_state = STATE.FLAG
     
     def prepare(self):
-        Globals.red_bots[0].red4ready = True
-        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].red5ready:
+        Globals.red_bots[0].bot4ready = True
+        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot5ready:
             self.curr_state = STATE.BAIT
 
     def bait(self):

@@ -53,8 +53,8 @@ class Red5(RedBot):
             self.curr_state = STATE.TIANSHUI
 
     def BAIT_TRUE(self):
-        Globals.red_bots[0].bot4ready = True
-        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot5ready:
+        Globals.red_bots[0].bot5ready = True
+        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot4ready:
             self.curr_state = STATE.BAO
 
     def closest_enemy_to_flag(self):

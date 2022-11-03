@@ -59,7 +59,7 @@ class Red3(RedBot):
             self.curr_state = STATE.BAIT
 
     def bait(self):
-        if self.jailed:
+        if self.x >= 1200 and self.y >= 650:
             self.curr_state = STATE.JAIL
         bot, distance = self.closest_enemy_to_flag()
         # ? move across border, evading enemies
@@ -85,8 +85,9 @@ class Red3(RedBot):
     
     def jailedf(self):
         # todo - if jailbroken
+        Globals.red_bots[0].bot3ready = False
         if not self.jailed:
-            self.curr_state = STATE.returnHome
+            self.curr_state = STATE.HOME
     
     def gohome(self):
         # todo - move to upper position

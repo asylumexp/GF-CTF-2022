@@ -50,10 +50,10 @@ class RedBot(Bot):
             elif distance < 250:
                 Globals.red_enemy_side_time += 10
 
-        # try:
-        self.tick()
-        # except Exception:
-            # print("Red Exception occurred\n")
+        try:
+            self.tick()
+        except Exception:
+            print("Red Exception occurred\n")
 
     def tick(self):
         pass

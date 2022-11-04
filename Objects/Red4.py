@@ -44,22 +44,20 @@ class Red4(RedBot):
             self.turn_towards(650, 50, Globals.FAST)
             self.drive_forward(Globals.FAST)
         # todo Check for enemies
-        # if distance < 250 and bot.x > 650:
-        #     self.curr_state = STATE.ATTACK
-        # todo Wait for Bait
-        
+        # ! if distance < 250 and bot.x > 650:
+        # !    self.curr_state = STATE.ATTACK
+        # * Wait for Bait
         else:
-            print("else")
-            self.curr_state = STATE.BAIT
+            self.curr_state = STATE.PREPARE
             # * self.curr_state = STATE.FLAG
     
     def prepare(self):
-        Globals.red_bots[0].red4ready = True
-        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].red5ready:
+        Globals.red_bots[0].bot4ready = True
+        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot5ready:
             self.curr_state = STATE.BAIT
 
     def bait(self):
-        if self.jailed:
+        if self.x >= 1200 and self.y >= 650:
             self.curr_state = STATE.JAIL
         bot, distance = self.closest_enemy_to_flag()
         # ? move across border, evading enemies
@@ -85,11 +83,11 @@ class Red4(RedBot):
     
     def jailedf(self):
         # todo - if jailbroken
+        Globals.red_bots[0].bot4ready = False
         if not self.jailed:
-            self.curr_state = STATE.returnHome
+            self.curr_state = STATE.HOME
     
     def gohome(self):
-        # todo - move to upper position
         self.curr_state = STATE.WAIT
     
     def attack(self):

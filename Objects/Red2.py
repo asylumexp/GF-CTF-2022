@@ -1,4 +1,5 @@
 from GameFrame import RedBot, Globals
+import random
 from enum import Enum
 
 
@@ -11,10 +12,12 @@ class STATE(Enum):
 class Red2(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
+        self.initial_wait = random.randint(30, 90)
+        self.wait_count = 0
         image = self.load_image("Red2.png")
         self.set_image(image, 25, 25)
 
-        self.curr_state = STATE.WAIT
+        self.curr_state = STATE.ATTACK
 
     def tick(self):
         if self.curr_state == STATE.WAIT:
@@ -45,7 +48,7 @@ class Red2(RedBot):
         bot, distance = self.closest_enemy_to_flag()
         angle = self.angleRelative(bot.x,bot.y)
         self.turn_towards(bot.x, bot.y, Globals.FAST)
-        if distance < 100 and angle < 70:
+        if distance < 100 and angle<70:
             self.drive_forward(Globals.FAST)
         if distance > 100:
             self.curr_state = STATE.WAIT
@@ -63,11 +66,8 @@ class Red2(RedBot):
             self.drive_forward(Globals.FAST)
 
     def return_home(self):
-        #if self.x <= Globals.blue_flag.x-40 or self.x >= Globals.blue_flag.x-50:
-            #self.turn_towards(Globals.blue_flag.x-40, Globals.blue_flag.y, Globals.FAST)
-            #self.drive_forward(Globals.FAST)
-        if self.point_to_point_distance(self.x, self.y, Globals.blue_flag.x, Globals.blue_flag.y) > 80:
-            self.turn_towards(Globals.blue_flag.x-60, Globals.blue_flag.y-60, Globals.FAST)
+        if self.x <= Globals.blue_flag.x-60 or self.x >= Globals.blue_flag.x-40:
+            self.turn_towards(Globals.blue_flag.x-50, Globals.blue_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         else:
             self.curr_state = STATE.WAIT
@@ -85,12 +85,13 @@ class Red2(RedBot):
 
         return closest_bot, shortest_distance
 
-    def angleRelative(self, x, y):
-        angle = self.NormalizedAngle(x, y)
-        diffangle = min(abs(self.angle-angle), 360-abs(self.angle-angle))
+    def angleRelative(self,x,y):
+        angle=self.NormalizedAngle(x,y)
+        diffangle=min(abs(self.angle-angle),360-abs(self.angle-angle))
         return diffangle
-
     def NormalizedAngle(self,x,y):
         angle = self.get_rotation_to_coordinate(x,y)
-        if angle < 0: angle += 360
+        if angle<0: angle+=360
         return angle
+
+

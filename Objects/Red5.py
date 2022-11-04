@@ -3,13 +3,13 @@ from enum import Enum
 
 
 class STATE(Enum):
-    TIANSHUI = 0 # Wait
-    HANDAN = 1 #strike
-    PINQLIANG = 2 # Move 
-    BAO = 3 # Bait state
-    BAIT_TRUE = 4 # Prepare bait state
-    EVADE = 5 # Evade state
-    JAIL = 6 # Jail state
+    TIANSHUI = 0 # * Wait state
+    HANDAN = 1 # * Strike state
+    PINQLIANG = 2 # * Move to area state
+    BAO = 3 # * Bait state
+    BAIT_TRUE = 4 # * Prepare bait state
+    EVADE = 5 # * Evade state
+    JAIL = 6 # * Jail state
 
 class Red5(RedBot):
     def __init__(self, room, x, y):

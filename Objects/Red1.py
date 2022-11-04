@@ -3,7 +3,7 @@ import random
 from enum import Enum
 
 #TEST
-
+#Work
 class STATE(Enum):
     CHILL = 1
     STRIKE = 2
@@ -50,7 +50,7 @@ class Red1(RedBot):
 
     def STRIKE(self):
         bot, distance = self.closest_enemy_to_flag()
-        angle = self.angleRelative(bot.x,bot.y)
+        angle = abs(self.angleRelative(bot.x,bot.y))
         self.turn_towards(bot.x, bot.y, Globals.FAST)
         if distance<100 and angle<70:
                 self.drive_forward(Globals.FAST)
@@ -72,10 +72,15 @@ class Red1(RedBot):
                 closest_bot = curr_bot
 
         return closest_bot, shortest_distance
+
     def angleRelative(self,x,y):
+        LEFT=False
         angle=self.NormalizedAngle(x,y)
+        if self.angle-angle<0: LEFT=True
         diffangle=min(abs(self.angle-angle),360-abs(self.angle-angle))
+        if LEFT: diffangle *= -1
         return diffangle
+
     def NormalizedAngle(self,x,y):
         angle = self.get_rotation_to_coordinate(x,y)
         if angle<0: angle+=360

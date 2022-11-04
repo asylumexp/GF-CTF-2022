@@ -41,7 +41,7 @@ class Red3(RedBot):
         bot, distance = self.closest_enemy_to_flag()
         #Stay and or move close to the top border
         if self.x <= 644 or self.x >= 656:
-            self.turn_towards(650, 50, Globals.FAST)
+            self.turn_towards(650, 600, Globals.FAST)
             self.drive_forward(Globals.FAST)
         # todo Check for enemies
         # if distance < 250 and bot.x > 650:
@@ -62,25 +62,33 @@ class Red3(RedBot):
         if self.x >= 1200 and self.y >= 650:
             self.curr_state = STATE.JAIL
         bot, distance = self.closest_enemy_to_flag()
-        # ? move across border, evading enemies
+        # * move across border, evading enemies
         self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
         # todo keep enemies away from bot three
-        if distance < 250:
-            self.evadeBots()
-        # * if no enemies are attacking self
-        else:
-            self.attackFLAG()
+        # ?if distance < 250:
+        # ?    self.evadeBots()
+        # ?# * if no enemies are attacking self
+        # ?else:
+        self.attackFLAG()
     
     def attackFLAG(self):
         # * If tagged:
         if self.jailed:
             self.curr_state = STATE.JAIL
         # todo - evade enemies
-        self.evadeBots()
+        # ? self.evadeBots()
         # todo - move to flag
         # todo - return with flag
-        self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
-        self.drive_forward(Globals.FAST)
+        if not self.has_flag:
+            print("no flag", "red3")
+            self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
+            self.drive_forward(Globals.FAST)
+        elif self.has_flag:
+            print("flag", "red3")
+            self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
+            self.drive_forward(Globals.FAST)
+        else:
+            print("PASS, RED3 attackFLAG()")
 
     
     def jailedf(self):

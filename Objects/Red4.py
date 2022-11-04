@@ -63,22 +63,30 @@ class Red4(RedBot):
         # ? move across border, evading enemies
         self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
         # todo keep enemies away from bot three
-        if distance < 250:
-            self.evadeBots()
-        # * if no enemies are attacking self
-        else:
-            self.attackFLAG()
+        # ?if distance < 250:
+        # ?    self.evadeBots()
+        # ?# * if no enemies are attacking self
+        # ?else:
+        self.attackFLAG()
     
     def attackFLAG(self):
         # * If tagged:
         if self.jailed:
             self.curr_state = STATE.JAIL
         # todo - evade enemies
-        self.evadeBots()
+        # self.evadeBots()
         # todo - move to flag
         # todo - return with flag
-        self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
-        self.drive_forward(Globals.FAST)
+        if not self.has_flag:
+            print("no flag", "red4")
+            self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
+            self.drive_forward(Globals.FAST)
+        elif self.has_flag:
+            print("flag", "red4")
+            self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
+            self.drive_forward(Globals.FAST)
+        else:
+            print("PASS, RED4 attackFLAG()")
 
     
     def jailedf(self):

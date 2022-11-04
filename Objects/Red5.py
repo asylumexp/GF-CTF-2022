@@ -113,13 +113,13 @@ class Red5(RedBot):
             self.curr_state = STATE.JAIL
         bot, distance = self.closest_enemy_to_bot()
         distance = self.point_to_point_distance(self.x, self.y, bot.x, bot.y)
-        # if distance < 50:
-        if not self.has_flag:
-            print("no flag", "red5")
+        if distance < 50:
+            self.turn_left(Globals.FAST)
+            self.drive_forward(Globals.FAST)
+        elif not self.has_flag:
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         elif self.has_flag:
-            print("flag", "red5")
             self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         else:

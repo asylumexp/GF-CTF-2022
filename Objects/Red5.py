@@ -9,7 +9,7 @@ class STATE(Enum):
     HANDAN = 1 #strike
     BAO = 3 #bait dodge
     EVADE = 5 #exactly what the state says
-
+    JAIL = 6
 
 
 class Red5(RedBot):
@@ -19,8 +19,6 @@ class Red5(RedBot):
         self.curr_state = STATE.TIANSHUI
         #boatman!!
     def tick(self):
-        print(self.curr_state)
-
         if self.curr_state == STATE.PINQLIANG:
             self.PINQLIANG()
         elif self.curr_state == STATE.HANDAN:
@@ -31,6 +29,10 @@ class Red5(RedBot):
             self.BAIT_TRUE()
         elif self.curr_state == STATE.EVADE:
             self.EVADE()
+        elif self.curr_state == STATE.BAO:
+            self.BAO()
+        elif self.curr_state == STATE.JAIL:
+            self.JAIL()
         else:
             self.curr_state = STATE.PINQLIANG
 
@@ -107,13 +109,28 @@ class Red5(RedBot):
             self.curr_state = STATE.PINQLIANG
 
     def BAO (self):
-        distance = self.point_to_point_distance(self.x, self.y, self.closest_enemy_to_bot.x, self.closest_enemy_to_bot.y)
-        if distance < 200:
+        if self.x >= 1200 and self.y >= 650:
+            self.curr_state = STATE.JAIL
+        bot, distance = self.closest_enemy_to_bot()
+        distance = self.point_to_point_distance(self.x, self.y, bot.x, bot.y)
+        # if distance < 50:
+        if not self.has_flag:
+            print("no flag", "red5")
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
+        elif self.has_flag:
+            print("flag", "red5")
+            self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
+            self.drive_forward(Globals.FAST)
         else:
-            self.curr_state = STATE.EVADE()
-
+            print("PASS, RED5 BAO()")
+        # else:
+        #     self.curr_state = STATE.EVADE
+        
+    def JAIL(self):
+        Globals.red_bots[0].bot5ready = False
+        if not self.jailed:
+            self.curr_state = STATE.TIANSHUI
 
 
 

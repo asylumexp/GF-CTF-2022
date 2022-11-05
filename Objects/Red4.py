@@ -107,7 +107,12 @@ class Red4(RedBot):
     """
     
     def evadeBots(self):
-        pass
+        closest_enemy, dist = self.closest_enemy_to_self(True)
+        self.drive_forward(Globals.FAST)
+        if self.angleRelative(closest_enemy.x,closest_enemy.y)<0:
+            self.turn_right(Globals.FAST)
+        else:
+            self.turn_left(Globals.FAST)
         # # todo - evade bot
         # bot, dist = self.closest_enemy_to_self(True)
         # startMOVING = False
@@ -201,3 +206,15 @@ class Red4(RedBot):
         else:
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
+    def angleRelative(self,x,y):
+        LEFT=False
+        angle=self.NormalizedAngle(x,y)
+        if self.angle-angle<0: LEFT=True
+        diffangle=min(abs(self.angle-angle),360-abs(self.angle-angle))
+        if LEFT: diffangle *= -1
+        return diffangle
+
+    def NormalizedAngle(self,x,y):
+        angle = self.get_rotation_to_coordinate(x,y)
+        if angle<0: angle+=360
+        return angle

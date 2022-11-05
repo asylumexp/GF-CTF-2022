@@ -18,7 +18,7 @@ class Red2(RedBot):
 
     def tick(self):
         # Lame declaring outside init becuz of weird glitch with gameframe
-        self.psuedoflagx=Globals.blue_flag.x-150
+        self.psuedoflagx=Globals.blue_flag.x-250
         if self.curr_state == STATE.WAIT:
             self.wait()
         elif self.curr_state == STATE.ATTACK:
@@ -61,8 +61,10 @@ class Red2(RedBot):
         if not bot_jailed:
             self.curr_state = STATE.RETURN
         else:
+            angle = self.angleRelative(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT)
             self.turn_towards(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT, Globals.FAST)
-            self.drive_forward(Globals.FAST)
+            if angle <120:
+                self.drive_forward(Globals.FAST)
 
     def return_home(self):
         #if self.x <= self.psuedoflagx-40 or self.x >= self.psuedoflagx-50:

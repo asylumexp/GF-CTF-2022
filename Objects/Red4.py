@@ -59,7 +59,7 @@ class Red4(RedBot):
     def bait(self):
         if self.x >= 1200 and self.y >= 650:
             self.curr_state = STATE.JAIL
-        bot, distance = self.closest_enemy_to_flag()
+        bot, distance = self.closest_enemy_to_self(True)
         # ? move across border, evading enemies
         if not self.has_flag:
             print("no flag", "red4")
@@ -149,6 +149,20 @@ class Red4(RedBot):
             curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
                                                          Globals.blue_flag.x, Globals.blue_flag.y)
             
+            if curr_bot_dist < shortest_distance:
+                shortest_distance = curr_bot_dist
+                closest_bot = curr_bot
+
+        return closest_bot, shortest_distance
+
+    def closest_enemy_to_enemyflag(self):
+        closest_bot = Globals.blue_bots[0]
+        shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
+                                                         Globals.red_flag.x, Globals.red_flag.y)
+        for curr_bot in Globals.blue_bots:
+            curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
+                                                         Globals.red_flag.x, Globals.red_flag.y)
+
             if curr_bot_dist < shortest_distance:
                 shortest_distance = curr_bot_dist
                 closest_bot = curr_bot

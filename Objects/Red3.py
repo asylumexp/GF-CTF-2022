@@ -49,7 +49,6 @@ class Red3(RedBot):
         # todo Wait for Bait
         
         else:
-            print("else")
             self.curr_state = STATE.PREPARE
             # * self.curr_state = STATE.FLAG
     
@@ -64,11 +63,9 @@ class Red3(RedBot):
         bot, distance = self.closest_enemy_to_flag()
         # * move across border, evading enemies
         if not self.has_flag:
-            print("no flag", "red3")
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         elif self.has_flag:
-            print("flag", "red3")
             self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         else:

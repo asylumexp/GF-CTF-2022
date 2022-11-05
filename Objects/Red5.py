@@ -15,6 +15,7 @@ class Red5(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
         self.set_image("Images/batman2.png", 25, 25)
+        self.curr_state = STATE.TIANSHUI
 
     def tick(self):
         # * States
@@ -110,11 +111,11 @@ class Red5(RedBot):
         closest_bot = Globals.blue_bots[0]
 
         shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
-                                                         Globals.red_bots[5].x, Globals.red_bots[5].y)
+                                                         Globals.red_bots[4].x, Globals.red_bots[4].y)
         for curr_bot in Globals.blue_bots:
 
             curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
-                                                         Globals.red_bots[5].x, Globals.red_bots[5].y)
+                                                         Globals.red_bots[4].x, Globals.red_bots[4].y)
             if curr_bot_dist < shortest_distance:
                 shortest_distance = curr_bot_dist
                 closest_bot = curr_bot

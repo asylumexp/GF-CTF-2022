@@ -14,7 +14,7 @@ class Red2(RedBot):
         image = self.load_image("Red2.png")
         self.set_image(image, 25, 25)
 
-        self.curr_state = STATE.WAIT
+        self.curr_state = STATE.RETURN
 
     def tick(self):
         # Lame declaring outside init becuz of weird glitch with gameframe
@@ -46,7 +46,7 @@ class Red2(RedBot):
     def attack(self):
         bot, distance = self.closest_enemy_to_flag()
         angle = self.angleRelative(bot.x,bot.y)
-        self.turn_towards(bot.x, bot.y, Globals.FAST)
+        self.turn_towards(bot.x+20, bot.y, Globals.FAST)
         if distance < 100 and angle < 70:
             self.drive_forward(Globals.FAST)
         if distance > 100:

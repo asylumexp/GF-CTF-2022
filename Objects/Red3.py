@@ -71,11 +71,12 @@ class Red3(RedBot):
         else:
             print("PASS, RED3 attackFLAG()")
         # todo keep enemies away from bot three
-        # ?if distance < 250:
-        # ?    self.evadeBots()
-        # ?# * if no enemies are attacking self
-        # ?else:
-        self.attackFLAG()
+        if distance < 250:
+            self.evadeBots()
+        # * if no enemies are attacking self
+        else:
+            self.attackFLAG()
+
     
     def attackFLAG(self):
         # * If tagged:
@@ -107,26 +108,36 @@ class Red3(RedBot):
     """
     Helper Functions
     """
-    
+    # * Evade bots
     def evadeBots(self):
-        pass
-        # # todo - evade bot
-        # bot, dist = self.closest_enemy_to_self(True)
-        # startMOVING = False
-        # if self.curr_rotation <= bot.curr_rotation + 9 and self.curr_rotation >= bot.curr_rotation - 9:
-        #     startMOVING = True
-        # elif self.curr_rotation <= 180:
-        #     if self.curr_rotation + 2 < bot.curr_rotation < self.curr_rotation + 180:
-        #         self.turn_left(Globals.FAST)
-        #     else:
-        #         self.turn_right(Globals.FAST)
-        # else:
-        #     if self.curr_rotation + 2 < bot.curr_rotation < 360 or 0 <= bot.curr_rotation < self.curr_rotation - 180:
-        #         self.turn_left(Globals.FAST)
-        #     else:
-        #         self.turn_right(Globals.FAST)
-        # if startMOVING == True:
-        #     self.drive_forward(Globals.FAST)
+        if self.x >= 1200 and self.y >= 650:
+            self.curr_state = STATE.JAIL
+        distance_to_flag = self.point_to_point_distance(self.x, self.y, Globals.blue_flag.x, Globals.blue_flag.y)
+        pointX, pointY = self.oppositeDirection()
+        closest_bot, dist = self.closest_enemy_to_self(True)
+        self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
+        self.drive_forward(Globals.FAST)
+        if dist > 100 and self.x < Globals.SCREEN_WIDTH/2:
+            self.curr_state = STATE.BAIT
+        elif dist < 100:
+            if self.y < 100:
+                self.turn_towards(self.x + 100, self.y + 100)
+                self.drive_forward(Globals.FAST)
+            elif self.y > 650:
+                self.turn_towards(self.x + 100, self.y - 100)
+                self.drive_forward(Globals.FAST)
+            else:
+                self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
+                self.drive_forward(Globals.FAST)
+        elif distance_to_flag < 100:
+            self.curr_state = STATE.FLAG
+            
+    # * Get opposite direction from self, from winner 2020 code
+    def oppositeDirection(self):
+        closest_bot, dist = self.closest_enemy_to_self(True)
+        pointX = self.x - closest_bot.x
+        pointY = self.y - closest_bot.y
+        return pointX,pointY
             
              
         

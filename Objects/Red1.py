@@ -32,29 +32,31 @@ class Red1(RedBot):
 
     def flagreturn(self):
         bot, distance = self.closest_enemy_to_flag()
-        flagAngle=self.angleRelative(Globals.blue_flag.x,Globals.blue_flag.y)
+        flagAngle=abs(self.angleRelative(Globals.blue_flag.x,Globals.blue_flag.y))
         if distance<450:
             self.curr_state=STATE.STRIKE
         elif self.point_to_point_distance(self.x, self.y, Globals.blue_flag.x, Globals.blue_flag.y)>20:
-
-            self.turn_towards(Globals.blue_flag.x,Globals.blue_flag.y,Globals.FAST)
-            self.drive_forward(Globals.MEDIUM)
+            if flagAngle<80:
+                self.turn_towards(Globals.blue_flag.x,Globals.blue_flag.y,Globals.FAST)
+                self.drive_forward(Globals.FAST)
+            else:
+                self.turn_towards(Globals.blue_flag.x,Globals.blue_flag.y,Globals.FAST)
         else:
             self.curr_state= STATE.CHILL
 
     def wait(self):
         bot, distance = self.closest_enemy_to_flag()
         self.turn_towards(bot.x, bot.y, Globals.FAST)
-        if distance<150:
+        if distance<175:
             self.curr_state=STATE.STRIKE
 
     def STRIKE(self):
         bot, distance = self.closest_enemy_to_flag()
         angle = abs(self.angleRelative(bot.x,bot.y))
         self.turn_towards(bot.x, bot.y, Globals.FAST)
-        if distance<100 and angle<70:
+        if distance<125 and angle<70:
                 self.drive_forward(Globals.FAST)
-        if distance>100:
+        if distance>125:
             self.curr_state=STATE.FLAGRETURN
 
     def turntoflag(self):

@@ -14,9 +14,11 @@ class Red2(RedBot):
         image = self.load_image("Red2.png")
         self.set_image(image, 25, 25)
 
-        self.curr_state = STATE.WAIT
+        self.curr_state = STATE.RETURN
 
     def tick(self):
+        # Lame declaring outside init becuz of weird glitch with gameframe
+        self.psuedoflagx=Globals.blue_flag.x-150
         if self.curr_state == STATE.WAIT:
             self.wait()
         elif self.curr_state == STATE.ATTACK:
@@ -44,7 +46,7 @@ class Red2(RedBot):
     def attack(self):
         bot, distance = self.closest_enemy_to_flag()
         angle = self.angleRelative(bot.x,bot.y)
-        self.turn_towards(bot.x, bot.y, Globals.FAST)
+        self.turn_towards(bot.x+20, bot.y, Globals.FAST)
         if distance < 100 and angle < 70:
             self.drive_forward(Globals.FAST)
         if distance > 100:
@@ -63,11 +65,11 @@ class Red2(RedBot):
             self.drive_forward(Globals.FAST)
 
     def return_home(self):
-        #if self.x <= Globals.blue_flag.x-40 or self.x >= Globals.blue_flag.x-50:
-            #self.turn_towards(Globals.blue_flag.x-40, Globals.blue_flag.y, Globals.FAST)
+        #if self.x <= self.psuedoflagx-40 or self.x >= self.psuedoflagx-50:
+            #self.turn_towards(self.psuedoflagx-40, Globals.blue_flag.y, Globals.FAST)
             #self.drive_forward(Globals.FAST)
-        if self.point_to_point_distance(self.x, self.y, Globals.blue_flag.x, Globals.blue_flag.y) > 80:
-            self.turn_towards(Globals.blue_flag.x-60, Globals.blue_flag.y-60, Globals.FAST)
+        if self.point_to_point_distance(self.x, self.y, self.psuedoflagx, Globals.blue_flag.y) > 30:
+            self.turn_towards(self.psuedoflagx, Globals.blue_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         else:
             self.curr_state = STATE.WAIT
@@ -75,10 +77,10 @@ class Red2(RedBot):
     def closest_enemy_to_flag(self):
         closest_bot = Globals.blue_bots[0]
         shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
-                                                         Globals.blue_flag.x, Globals.blue_flag.y)
+                                                         self.psuedoflagx, Globals.blue_flag.y)
         for curr_bot in Globals.blue_bots:
             curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
-                                                         Globals.blue_flag.x, Globals.blue_flag.y)
+                                                         self.psuedoflagx, Globals.blue_flag.y)
             if curr_bot_dist < shortest_distance:
                 shortest_distance = curr_bot_dist
                 closest_bot = curr_bot

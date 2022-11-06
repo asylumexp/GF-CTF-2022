@@ -59,14 +59,12 @@ class Red4(RedBot):
     def bait(self):
         if self.x >= 1200 and self.y >= 650:
             self.curr_state = STATE.JAIL
-        bot, distance = self.closest_enemy_to_flag()
+        bot, distance = self.closest_enemy_to_self(True)
         # ? move across border, evading enemies
         if not self.has_flag:
-            print("no flag", "red4")
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         elif self.has_flag:
-            print("flag", "red4")
             self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         else:
@@ -109,7 +107,12 @@ class Red4(RedBot):
     """
     
     def evadeBots(self):
-        pass
+        closest_enemy, dist = self.closest_enemy_to_self(True)
+        self.drive_forward(Globals.FAST)
+        if self.angleRelative(closest_enemy.x,closest_enemy.y)<0:
+            self.turn_right(Globals.FAST)
+        else:
+            self.turn_left(Globals.FAST)
         # # todo - evade bot
         # bot, dist = self.closest_enemy_to_self(True)
         # startMOVING = False
@@ -154,6 +157,20 @@ class Red4(RedBot):
                 closest_bot = curr_bot
 
         return closest_bot, shortest_distance
+
+    def closest_enemy_to_enemyflag(self):
+        closest_bot = Globals.blue_bots[0]
+        shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
+                                                         Globals.red_flag.x, Globals.red_flag.y)
+        for curr_bot in Globals.blue_bots:
+            curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
+                                                         Globals.red_flag.x, Globals.red_flag.y)
+
+            if curr_bot_dist < shortest_distance:
+                shortest_distance = curr_bot_dist
+                closest_bot = curr_bot
+
+        return closest_bot, shortest_distance
     
     def closest_enemy_to_self(self, ignore):
         # todo - make more efficient
@@ -189,3 +206,15 @@ class Red4(RedBot):
         else:
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
+    def angleRelative(self,x,y):
+        LEFT=False
+        angle=self.NormalizedAngle(x,y)
+        if self.angle-angle<0: LEFT=True
+        diffangle=min(abs(self.angle-angle),360-abs(self.angle-angle))
+        if LEFT: diffangle *= -1
+        return diffangle
+
+    def NormalizedAngle(self,x,y):
+        angle = self.get_rotation_to_coordinate(x,y)
+        if angle<0: angle+=360
+        return angle

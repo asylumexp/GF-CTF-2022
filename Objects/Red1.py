@@ -57,7 +57,12 @@ class Red1(RedBot):
         if distance<125 and angle<70:
                 self.drive_forward(Globals.FAST)
         if distance>125:
-            self.curr_state=STATE.FLAGRETURN
+            if self.BotsWithin(400)==1:
+                self.turn_towards(bot.x, bot.y, Globals.FAST)
+                if angle<70:
+                    self.drive_forward(Globals.FAST)
+            else:
+                self.curr_state=STATE.FLAGRETURN
 
     def turntoflag(self):
         pass
@@ -88,5 +93,12 @@ class Red1(RedBot):
         if angle<0: angle+=360
         return angle
 
-
+    def BotsWithin(self,dist):
+        num=0
+        for curr_bot in Globals.blue_bots:
+            curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
+                                                         Globals.blue_flag.x, Globals.blue_flag.y)
+            if curr_bot_dist<dist:
+                num+=1
+        return num
 

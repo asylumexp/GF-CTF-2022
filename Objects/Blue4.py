@@ -138,6 +138,7 @@ class Blue4(BlueBot):
                 closeBots.append(bot)
                 if bot.x < 800:
                     closeBots.remove(bot)
+        print(len(closeBots))
         return len(closeBots)
 
     def oppositeDirection(self):
@@ -154,6 +155,7 @@ class Blue4(BlueBot):
             if testing_bot_dist < shortest_distance:
                 shortest_distance = testing_bot_dist
                 closest_bot = testing_bot
+                print(closest_bot)
             return closest_bot,shortest_distance
     
     def closest_enemy_to_flag(self):
@@ -164,6 +166,7 @@ class Blue4(BlueBot):
             if testing_bot_dist < shortest_distance:
                 shortest_distance = testing_bot_dist
                 closest_bot = testing_bot
+                print(closest_bot)
             return closest_bot,shortest_distance
     
     def attackDirection(self):

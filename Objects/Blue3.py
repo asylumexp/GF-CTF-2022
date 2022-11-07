@@ -38,6 +38,7 @@ class Blue3(BlueBot):
         closest_bot, dist = self.closest_enemy()
         dist_to_point = self.point_to_point_distance(self.x, self.y,Globals.blue_flag.x + 500, Globals.blue_flag.y - 200)
         if distance > 100:
+            print("far from flag")
             if dist_to_point > 400:
                 if dist > 100:
                     self.turn_towards(Globals.blue_flag.x + 500, Globals.blue_flag.y - 200)
@@ -59,6 +60,7 @@ class Blue3(BlueBot):
                     else:
                         self.curr_state = STATE.EVADE
         elif distance < 100:
+            print("Close to flag")
             self.turn_towards(Globals.blue_flag.x, Globals.blue_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
             if self.has_flag == True:
@@ -124,6 +126,7 @@ class Blue3(BlueBot):
             if testing_bot_dist < shortest_distance:
                 shortest_distance = testing_bot_dist
                 closest_bot = testing_bot
+                print(closest_bot)
             return closest_bot,shortest_distance
 
 

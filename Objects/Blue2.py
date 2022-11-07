@@ -26,7 +26,6 @@ class Blue2(BlueBot):
             self.save()
         else: 
             self.curr_state = STATE.RETURN
-        print(self.curr_state)
         
             
 #STATE Functions 
@@ -39,7 +38,6 @@ class Blue2(BlueBot):
         # if an enemy is less than x and y from flag 
         #change tto Attack state 
         if self.enemy_in_danger_zone():
-            print("Enemy in Danger Zone")
             self.curr_state = STATE.ATTACK
 
         # if a team bot is jailed and enemy is more than x and y from flag
@@ -63,7 +61,6 @@ class Blue2(BlueBot):
         point_distance = self.point()
 
         if self.enemy_in_danger_zone():
-            print("Enemy in Danger Zone")
             self.curr_state = STATE.ATTACK
         
         elif self.tean_mate_in_jail() == True and closest_bot.x >= Globals.SCREEN_WIDTH/2:

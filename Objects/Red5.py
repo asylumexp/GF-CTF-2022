@@ -10,7 +10,6 @@ class STATE(Enum):
     BAIT_TRUE = 4 # * Prepare bait state
     EVADE = 5 # * Evade state
     JAIL = 6 # * Jail state
-    FLAG_ATTACK = 7 # Flag run state
 
 class Red5(RedBot):
     def __init__(self, room, x, y):
@@ -20,7 +19,6 @@ class Red5(RedBot):
 
     def tick(self):
         # * States
-        print(self.curr_state)
         if self.curr_state == STATE.PINQLIANG:
             self.PINQLIANG()
         elif self.curr_state == STATE.HANDAN:
@@ -29,8 +27,6 @@ class Red5(RedBot):
             self.TIANSHUI()
         elif self.curr_state == STATE.BAIT_TRUE:
             self.BAIT_TRUE()
-        elif self.curr_state == STATE.FLAG_ATTACK:
-            self.FLAG_ATTACK()
         elif self.curr_state == STATE.EVADE:
             self.EVADE()
         elif self.curr_state == STATE.BAO:
@@ -65,8 +61,8 @@ class Red5(RedBot):
     # * Waiting for other bait bots
     def BAIT_TRUE(self):
         Globals.red_bots[0].bot5ready = True
-        # if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot4ready:
-        self.curr_state = STATE.BAO
+        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot4ready:
+            self.curr_state = STATE.BAO
 
     #  * Checking for enemies
     def TIANSHUI(self):
@@ -76,34 +72,9 @@ class Red5(RedBot):
 
         else:
             self.curr_state = STATE.PINQLIANG
-
+            
     # * Bait state
     def BAO(self):
-
-        distance_to_flag = self.point_to_point_distance(self.x, self.y, Globals.blue_flag.x, Globals.blue_flag.y)
-        pointX, pointY = self.oppositeDirection()
-        closest_bot, dist = self.closest_enemy_to_bot()
-        self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
-        self.drive_forward(Globals.FAST)
-        if dist > 100:
-            self.curr_state = STATE.FLAG_ATTACK
-        elif dist < 100:
-            if self.y < 100:
-                self.turn_towards(self.x - 100, self.y + 100)
-                self.drive_forward(Globals.FAST)
-            elif self.y > 650:
-                self.turn_towards(self.x - 100, self.y - 100)
-                self.drive_forward(Globals.FAST)
-            else:
-                self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
-                self.drive_forward(Globals.FAST)
-        elif closest_bot < 100:
-            self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
-            self.drive_forward(Globals.FAST)
-
-
-    # flag run
-    def FLAG_ATTACK(self):
         if self.x >= 1200 and self.y >= 650:
             self.curr_state = STATE.JAIL
         bot, distance = self.closest_enemy_to_bot()
@@ -117,26 +88,31 @@ class Red5(RedBot):
         elif self.has_flag:
             self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
             self.drive_forward(Globals.FAST)
+        else:
+            print("PASS, RED5 BAO()")
+        # else:
+        #     self.curr_state = STATE.EVADE
 
     # * Jail state
     def JAIL(self):
-        # Globals.red_bots[0].bot5ready = False
+        Globals.red_bots[0].bot5ready = False
         if not self.jailed:
             self.curr_state = STATE.TIANSHUI
 
     # * Evade state
-    def EVADE(self):
-        # ! WAITING ON CHARLIE OR SAMS EVADE CODE TO FINISH
-        pass
-
+    def evadeBots(self):
+        print("evading")
+        closest_enemy, dist = self.closest_enemy_to_self(True)
+        
+        if self.angleRelative(closest_enemy.x,closest_enemy.y)<0:
+            self.turn_right(Globals.MEDIUM)
+        else:
+            self.turn_left(Globals.MEDIUM)
+        # Driving forward
+        self.drive_forward(Globals.FAST)
+    
     # ** Helper Functions **
-
-    def oppositeDirection(self):
-        closest_bot, dist = self.closest_enemy_to_bot()
-        pointX = self.x - closest_bot.x
-        pointY = self.y - closest_bot.y
-        return pointX,pointY
-
+    
     # * get closest enemy to self
     def closest_enemy_to_bot(self):
         closest_bot = Globals.blue_bots[0]
@@ -166,7 +142,7 @@ class Red5(RedBot):
                 closest_bot = curr_bot
 
         return closest_bot, shortest_distance
-
+    
     # * Relative angle calculation
     def angleRelative(self,x,y):
         angle=self.NormalizedAngle(x,y)
@@ -178,5 +154,3 @@ class Red5(RedBot):
         angle = self.get_rotation_to_coordinate(x,y)
         if angle<0: angle+=360
         return angle
-
-#

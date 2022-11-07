@@ -109,29 +109,39 @@ class Red3(RedBot):
     Helper Functions
     """
     # * Evade bots
+    # def evadeBots(self):
+    #     if self.x >= 1200 and self.y >= 650:
+    #         self.curr_state = STATE.JAIL
+    #     distance_to_flag = self.point_to_point_distance(self.x, self.y, Globals.blue_flag.x, Globals.blue_flag.y)
+    #     pointX, pointY = self.oppositeDirection()
+    #     closest_bot, dist = self.closest_enemy_to_self(True)
+    #     self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
+    #     self.drive_forward(Globals.FAST)
+    #     if dist > 100 and self.x < Globals.SCREEN_WIDTH/2:
+    #         self.curr_state = STATE.BAIT
+    #     elif dist < 100:
+    #         if self.y < 100:
+    #             self.turn_towards(self.x + 100, self.y + 100)
+    #             self.drive_forward(Globals.FAST)
+    #         elif self.y > 650:
+    #             self.turn_towards(self.x + 100, self.y - 100)
+    #             self.drive_forward(Globals.FAST)
+    #         else:
+    #             self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
+    #             self.drive_forward(Globals.FAST)
+    #     elif distance_to_flag < 100:
+    #         self.curr_state = STATE.FLAG
     def evadeBots(self):
-        if self.x >= 1200 and self.y >= 650:
-            self.curr_state = STATE.JAIL
-        distance_to_flag = self.point_to_point_distance(self.x, self.y, Globals.blue_flag.x, Globals.blue_flag.y)
-        pointX, pointY = self.oppositeDirection()
-        closest_bot, dist = self.closest_enemy_to_self(True)
-        self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
+        print("evading")
+        closest_enemy, dist = self.closest_enemy_to_self(True)
+        
+        if self.angleRelative(closest_enemy.x,closest_enemy.y)<0:
+            self.turn_right(Globals.MEDIUM)
+        else:
+            self.turn_left(Globals.MEDIUM)
+        # Driving forward
         self.drive_forward(Globals.FAST)
-        if dist > 100 and self.x < Globals.SCREEN_WIDTH/2:
-            self.curr_state = STATE.BAIT
-        elif dist < 100:
-            if self.y < 100:
-                self.turn_towards(self.x + 100, self.y + 100)
-                self.drive_forward(Globals.FAST)
-            elif self.y > 650:
-                self.turn_towards(self.x + 100, self.y - 100)
-                self.drive_forward(Globals.FAST)
-            else:
-                self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
-                self.drive_forward(Globals.FAST)
-        elif distance_to_flag < 100:
-            self.curr_state = STATE.FLAG
-            
+        
     # * Get opposite direction from self, from winner 2020 code
     def oppositeDirection(self):
         closest_bot, dist = self.closest_enemy_to_self(True)

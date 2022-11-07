@@ -5,11 +5,10 @@ from enum import Enum
 class STATE(Enum):
     WAIT = 1
     ATTACK = 2
-    FLAG = 3
-    PREPARE = 4
-    BAIT = 5
-    JAIL = 6
-    HOME = 7
+    PREPARE = 3
+    BAIT = 4
+    JAIL = 5
+    HOME = 6
 
 
 class Red4(RedBot):
@@ -23,8 +22,6 @@ class Red4(RedBot):
             self.wait()
         elif self.curr_state == STATE.ATTACK:
             self.attack()
-        elif self.curr_state == STATE.FLAG:
-            self.flag()
         elif self.curr_state == STATE.PREPARE:
             self.prepare()
         elif self.curr_state == STATE.BAIT:
@@ -38,21 +35,25 @@ class Red4(RedBot):
 
     def wait(self):
         bot, distance = self.closest_enemy_to_flag()
-        #Stay and or move close to the top border
+        # todo Check for enemies
+        if distance < 250 and bot.x > 650:
+           self.attack()
+        # * Stay and or move close to the top border
         if self.x <= 644 or self.x >= 656:
             self.turn_towards(650, 250, Globals.FAST)
             self.drive_forward(Globals.FAST)
-        # todo Check for enemies
-        # if distance < 250 and bot.x > 650:
-        #    self.curr_state = STATE.ATTACK
         # * Wait for Bait
         else:
             self.curr_state = STATE.PREPARE
-            # * self.curr_state = STATE.FLAG
     
     def prepare(self):
+        bot, distance = self.closest_enemy_to_flag()
+        # todo Check for enemies
         Globals.red_bots[0].bot4ready = True
-        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot5ready:
+        if distance < 250 and bot.x > 650:
+           self.attack()
+           self.curr_state = STATE.WAIT
+        elif Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot5ready:
             self.curr_state = STATE.BAIT
 
     def bait(self):
@@ -82,12 +83,6 @@ class Red4(RedBot):
     def gohome(self):
         self.curr_state = STATE.WAIT
     
-    def attack(self):
-        # todo - attack bots
-        
-        # todo - return to previous function
-        pass
-    
     """
     Helper Functions
     """     
@@ -103,10 +98,9 @@ class Red4(RedBot):
     def attack(self):
         bot, distance = self.closest_enemy_to_flag()
         if distance < 250:
+            Globals.red_bots[0].bot4ready = False
             self.turn_towards(bot.x, bot.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
-        else:
-            self.curr_state = STATE.WAIT
 
     def closest_enemy_to_flag(self):
         closest_bot = Globals.blue_bots[0]

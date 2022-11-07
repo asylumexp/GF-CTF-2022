@@ -116,11 +116,9 @@ class Red5(RedBot):
     # * get closest enemy to self
     def closest_enemy_to_bot(self):
         closest_bot = Globals.blue_bots[0]
-
         shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
                                                          Globals.red_bots[4].x, Globals.red_bots[4].y)
         for curr_bot in Globals.blue_bots:
-
             curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
                                                          Globals.red_bots[4].x, Globals.red_bots[4].y)
             if curr_bot_dist < shortest_distance:

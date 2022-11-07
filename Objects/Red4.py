@@ -62,7 +62,7 @@ class Red4(RedBot):
         if self.x >= 1200 and self.y >= 650:
             self.curr_state = STATE.JAIL
         # ? move across border, evading enemies
-        elif (angle<60 or distance<90) and not self.has_flag and angle>15:
+        elif (angle<60) and not self.has_flag and angle>15:
             self.evadeBots()
         elif not self.has_flag:
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)

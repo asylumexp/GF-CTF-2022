@@ -61,8 +61,8 @@ class Red5(RedBot):
     # * Waiting for other bait bots
     def BAIT_TRUE(self):
         Globals.red_bots[0].bot5ready = True
-        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot4ready:
-            self.curr_state = STATE.BAO
+        # if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot4ready:
+        self.curr_state = STATE.BAO
 
     #  * Checking for enemies
     def TIANSHUI(self):
@@ -95,7 +95,7 @@ class Red5(RedBot):
 
     # * Jail state
     def JAIL(self):
-        Globals.red_bots[0].bot5ready = False
+        # Globals.red_bots[0].bot5ready = False
         if not self.jailed:
             self.curr_state = STATE.TIANSHUI
 

@@ -1,6 +1,6 @@
 from GameFrame import RedBot, Globals
 from enum import Enum
-import random
+
 
 class STATE(Enum):
     WAIT = 1
@@ -18,29 +18,24 @@ class Red3(RedBot):
         self.set_image("Images/master.png", 25, 25)
         self.curr_state = STATE.WAIT
         self.prev_x_enemy = 0
-        self.initial_wait = random.randint(1, 12)
-        self.wait_count = 0
 
     def tick(self):
-        if self.wait_count < self.initial_wait:
-            self.wait_count += 1
+        if self.curr_state == STATE.WAIT:
+            self.wait()
+        elif self.curr_state == STATE.ATTACK:
+            self.attack()
+        elif self.curr_state == STATE.FLAG:
+            self.flag()
+        elif self.curr_state == STATE.PREPARE:
+            self.prepare()
+        elif self.curr_state == STATE.BAIT:
+            self.bait()
+        elif self.curr_state == STATE.JAIL:
+            self.jailedf()
+        elif self.curr_state == STATE.HOME:
+            self.gohome()
         else:
-            if self.curr_state == STATE.WAIT:
-                self.wait()
-            elif self.curr_state == STATE.ATTACK:
-                self.attack()
-            elif self.curr_state == STATE.FLAG:
-                self.flag()
-            elif self.curr_state == STATE.PREPARE:
-                self.prepare()
-            elif self.curr_state == STATE.BAIT:
-                self.bait()
-            elif self.curr_state == STATE.JAIL:
-                self.jailedf()
-            elif self.curr_state == STATE.HOME:
-                self.gohome()
-            else:
-                self.curr_state = STATE.WAIT
+            self.curr_state = STATE.WAIT
     # 
     def wait(self):
         bot, distance = self.closest_enemy_to_flag()
@@ -65,29 +60,22 @@ class Red3(RedBot):
     def bait(self):
         if self.x >= 1200 and self.y >= 650:
             self.curr_state = STATE.JAIL
-        bot, distance = self.closest_enemy_to_self(True)
-        # ? move across border, evading enemies
+        bot, distance = self.closest_enemy_to_flag()
+        # * move across border, evading enemies
         if not self.has_flag:
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         elif self.has_flag:
-            if self.x > 100:
-                print("self.x > 100")
-                self.turn_towards(50, self.y-20, Globals.FAST)
-                self.drive_forward(Globals.FAST)
-            elif self.x < 100:
-                if self.x < 100 and self.y < 100:
-                    print("self.x < 100 and self.y < 100")
-                    self.turn_towards(1200, 700, Globals.FAST)
-                    self.drive_forward(Globals.FAST)
-                else:
-                    print("self.x < 100")
-                    self.turn_towards(50, self.y-20, Globals.FAST)
-                    self.drive_forward(Globals.FAST)
+            self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
+            self.drive_forward(Globals.FAST)
+        else:
+            print("PASS, RED3 attackFLAG()")
         # todo keep enemies away from bot three
         if distance < 250:
             self.evadeBots()
         # * if no enemies are attacking self
+        else:
+            self.attackFLAG()
 
     
     def attackFLAG(self):
@@ -127,33 +115,22 @@ class Red3(RedBot):
         distance_to_flag = self.point_to_point_distance(self.x, self.y, Globals.blue_flag.x, Globals.blue_flag.y)
         pointX, pointY = self.oppositeDirection()
         closest_bot, dist = self.closest_enemy_to_self(True)
-        # self.turn_towards(self.x - pointX, self.y - pointY, Globals.FAST)
-        # self.drive_forward(Globals.FAST)
-        if not self.has_flag:
-            if dist > 100 and self.x < Globals.SCREEN_WIDTH/2:
-                self.curr_state = STATE.BAIT
-            elif dist < 100:
-                if self.y < 100:
-                    self.turn_towards(self.x + 100, self.y + 100)
-                    self.drive_forward(Globals.FAST)
-                elif self.y > 650:
-                    self.turn_towards(self.x + 100, self.y - 100)
-                    self.drive_forward(Globals.FAST)
-                else:
-                    self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
-                    self.drive_forward(Globals.FAST)
-            elif distance_to_flag < 100:
-                self.curr_state = STATE.FLAG
-        elif self.has_flag:
+        self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
+        self.drive_forward(Globals.FAST)
+        if dist > 100 and self.x < Globals.SCREEN_WIDTH/2:
+            self.curr_state = STATE.BAIT
+        elif dist < 100:
             if self.y < 100:
-                    self.turn_towards(self.x + 100, self.y + 100)
-                    self.drive_forward(Globals.FAST)
+                self.turn_towards(self.x + 100, self.y + 100)
+                self.drive_forward(Globals.FAST)
             elif self.y > 650:
                 self.turn_towards(self.x + 100, self.y - 100)
                 self.drive_forward(Globals.FAST)
             else:
-                self.turn_towards(self.x, self.y + pointY, Globals.FAST)
+                self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
                 self.drive_forward(Globals.FAST)
+        elif distance_to_flag < 100:
+            self.curr_state = STATE.FLAG
             
     # * Get opposite direction from self, from winner 2020 code
     def oppositeDirection(self):

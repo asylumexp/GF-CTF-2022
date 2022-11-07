@@ -8,7 +8,7 @@ class STATE(Enum):
     PINQLIANG = 2 # * Move to area state
     BAO = 3 # * Bait state
     BAIT_TRUE = 4 # * Prepare bait state
-    evadeBots = 5 # * Evade state
+    EVADE = 5 # * Evade state
     JAIL = 6 # * Jail state
 
 class Red5(RedBot):
@@ -27,8 +27,8 @@ class Red5(RedBot):
             self.TIANSHUI()
         elif self.curr_state == STATE.BAIT_TRUE:
             self.BAIT_TRUE()
-        elif self.curr_state == STATE.evadeBots:
-             self.evadeBots()
+        # elif self.curr_state == STATE.EVADE:
+        #     self.evadeBots()
         elif self.curr_state == STATE.BAO:
             self.BAO()
         elif self.curr_state == STATE.JAIL:

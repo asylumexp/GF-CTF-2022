@@ -57,7 +57,7 @@ class Red1(RedBot):
         if distance<125 and angle<70:
                 self.drive_forward(Globals.FAST)
         if distance>125:
-            if self.BotsWithin(400)==1:
+            if self.BotsWithin(200)==1:
                 self.turn_towards(bot.x, bot.y, Globals.FAST)
                 if angle<70:
                     self.drive_forward(Globals.FAST)

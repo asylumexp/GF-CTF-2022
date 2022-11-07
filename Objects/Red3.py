@@ -58,22 +58,21 @@ class Red3(RedBot):
             self.curr_state = STATE.BAIT
 
     def bait(self):
+        bot, distance = self.closest_enemy_to_self(True)
+        angle=abs(self.angleRelative(bot.x,bot.y))
         if self.x >= 1200 and self.y >= 650:
             self.curr_state = STATE.JAIL
-        bot, distance = self.closest_enemy_to_flag()
-        # * move across border, evading enemies
-        if not self.has_flag:
+        # ? move across border, evading enemies
+        elif angle<60 and distance<200 and not self.has_flag:
+            self.evadeBots()
+        elif not self.has_flag:
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         elif self.has_flag:
-            self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
+            i = self.angleRelative(Globals.red_bots[0].x, Globals.red_bots[0].y)
+            if i < 0 or i > 40:
+                self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
             self.drive_forward(Globals.FAST)
-        else:
-            print("PASS, RED3 attackFLAG()")
-        # todo keep enemies away from bot three
-        if distance < 250:
-            self.evadeBots()
-        # * if no enemies are attacking self
         else:
             self.attackFLAG()
 
@@ -109,32 +108,8 @@ class Red3(RedBot):
     Helper Functions
     """
     # * Evade bots
-    # def evadeBots(self):
-    #     if self.x >= 1200 and self.y >= 650:
-    #         self.curr_state = STATE.JAIL
-    #     distance_to_flag = self.point_to_point_distance(self.x, self.y, Globals.blue_flag.x, Globals.blue_flag.y)
-    #     pointX, pointY = self.oppositeDirection()
-    #     closest_bot, dist = self.closest_enemy_to_self(True)
-    #     self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
-    #     self.drive_forward(Globals.FAST)
-    #     if dist > 100 and self.x < Globals.SCREEN_WIDTH/2:
-    #         self.curr_state = STATE.BAIT
-    #     elif dist < 100:
-    #         if self.y < 100:
-    #             self.turn_towards(self.x + 100, self.y + 100)
-    #             self.drive_forward(Globals.FAST)
-    #         elif self.y > 650:
-    #             self.turn_towards(self.x + 100, self.y - 100)
-    #             self.drive_forward(Globals.FAST)
-    #         else:
-    #             self.turn_towards(self.x + pointX, self.y + pointY, Globals.FAST)
-    #             self.drive_forward(Globals.FAST)
-    #     elif distance_to_flag < 100:
-    #         self.curr_state = STATE.FLAG
     def evadeBots(self):
-        print("evading")
         closest_enemy, dist = self.closest_enemy_to_self(True)
-        
         if self.angleRelative(closest_enemy.x,closest_enemy.y)<0:
             self.turn_right(Globals.MEDIUM)
         else:
@@ -149,11 +124,6 @@ class Red3(RedBot):
         pointY = self.y - closest_bot.y
         return pointX,pointY
             
-             
-        
-        
-        
-
     def attack(self):
         bot, distance = self.closest_enemy_to_flag()
         if distance < 250:
@@ -210,8 +180,18 @@ class Red3(RedBot):
         else:
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
+    def angleRelative(self,x,y):
+        LEFT=False
+        angle=self.NormalizedAngle(x,y)
+        if self.angle-angle<0: LEFT=True
+        diffangle=min(abs(self.angle-angle),360-abs(self.angle-angle))
+        if LEFT: diffangle *= -1
+        return diffangle
 
-
+    def NormalizedAngle(self,x,y):
+        angle = self.get_rotation_to_coordinate(x,y)
+        if angle<0: angle+=360
+        return angle
 
 # from ast import Global
 # from GameFrame import RedBot, Globals

@@ -27,8 +27,8 @@ class Red5(RedBot):
             self.TIANSHUI()
         elif self.curr_state == STATE.BAIT_TRUE:
             self.BAIT_TRUE()
-        elif self.curr_state == STATE.EVADE:
-            self.EVADE()
+        # elif self.curr_state == STATE.EVADE:
+        #     self.evadeBots()
         elif self.curr_state == STATE.BAO:
             self.BAO()
         elif self.curr_state == STATE.JAIL:
@@ -75,18 +75,20 @@ class Red5(RedBot):
             
     # * Bait state
     def BAO(self):
-        if self.x >= 1200 and self.y >= 650:
-            self.curr_state = STATE.JAIL
         bot, distance = self.closest_enemy_to_bot()
         distance = self.point_to_point_distance(self.x, self.y, bot.x, bot.y)
-        if distance < 50:
-            self.turn_left(Globals.FAST)
-            self.drive_forward(Globals.FAST)
+        angle=abs(self.angleRelative(bot.x,bot.y))
+        if self.x >= 1200 and self.y >= 650:
+            self.curr_state = STATE.JAIL
+        elif angle<60 and distance<200 and not self.has_flag:
+            self.evadeBots()
         elif not self.has_flag:
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         elif self.has_flag:
-            self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
+            i = self.angleRelative(Globals.red_bots[0].x, Globals.red_bots[0].y)
+            if i < 0 or i > 40:
+                self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         else:
             print("PASS, RED5 BAO()")
@@ -101,10 +103,8 @@ class Red5(RedBot):
 
     # * Evade state
     def evadeBots(self):
-        print("evading")
-        closest_enemy, dist = self.closest_enemy_to_self(True)
-        
-        if self.angleRelative(closest_enemy.x,closest_enemy.y)<0:
+        closest_enemy, null = self.closest_enemy_to_bot()
+        if self.angleRelative(closest_enemy.x,closest_enemy.y)>0:
             self.turn_right(Globals.MEDIUM)
         else:
             self.turn_left(Globals.MEDIUM)

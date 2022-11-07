@@ -33,7 +33,7 @@ class Red1(RedBot):
     def flagreturn(self):
         bot, distance = self.closest_enemy_to_flag()
         flagAngle=abs(self.angleRelative(Globals.blue_flag.x,Globals.blue_flag.y))
-        if distance<450:
+        if distance<350:
             self.curr_state=STATE.STRIKE
         elif self.point_to_point_distance(self.x, self.y, Globals.blue_flag.x, Globals.blue_flag.y)>20:
             if flagAngle<80:
@@ -57,7 +57,7 @@ class Red1(RedBot):
         if distance<125 and angle<70:
                 self.drive_forward(Globals.FAST)
         if distance>125:
-            if self.BotsWithin(200)==1:
+            if self.BotsWithin(350)==1:
                 self.turn_towards(bot.x, bot.y, Globals.FAST)
                 if angle<70:
                     self.drive_forward(Globals.FAST)

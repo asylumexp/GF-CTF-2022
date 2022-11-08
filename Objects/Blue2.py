@@ -54,7 +54,7 @@ class Blue2(BlueBot):
 
     def jailbreak(self):
         bot_jailed = False
-        for team_bot in Globals.red_bots:
+        for team_bot in Globals.blue_bots:
             if team_bot.jailed:
                 bot_jailed = True
                 break

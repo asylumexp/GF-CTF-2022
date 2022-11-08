@@ -6,7 +6,7 @@ class STATE(Enum):
     WAIT = 0
     ATTACK = 1
     JAILBREAK = 2
-    RETURN = 2
+    RETURN = 3
 
 class Blue2(BlueBot):
     def __init__(self, room, x, y):

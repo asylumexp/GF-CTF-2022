@@ -32,7 +32,7 @@ class Red2(RedBot):
 
     def wait(self):
         bot, distance = self.closest_enemy_to_flag()
-        if distance < 250:
+        if distance < 200:
             self.curr_state = STATE.ATTACK
         else:
             bot_jailed = False
@@ -47,9 +47,9 @@ class Red2(RedBot):
         bot, distance = self.closest_enemy_to_flag()
         angle = self.angleRelative(bot.x,bot.y)
         self.turn_towards(bot.x+20, bot.y, Globals.FAST)
-        if distance < 250 and angle < 70:
+        if distance < 200 and angle < 70:
             self.drive_forward(Globals.FAST)
-        if distance > 250:
+        if distance > 200:
             self.curr_state = STATE.WAIT
 
     def jailbreak(self):

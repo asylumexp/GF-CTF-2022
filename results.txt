@@ -4,5 +4,13 @@
 Red Red 1528 Blue 163
 Blue Red 2734 Blue 5620
 Blue Red 837 Blue 25152
+Red Red 4278 Blue 2100
+Blue Red 474 Blue 24324
 Blue Red 0 Blue 20547
+Blue Red 15107 Blue 20607
+Red Red 14366 Blue 9234
+Red Red 25539 Blue 13286
+Red Red 7928 Blue 2536
+Red Red 12759 Blue 5282
+Red Red 7931 Blue 2865
 Red Red 8684 Blue 3698

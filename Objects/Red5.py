@@ -27,8 +27,6 @@ class Red5(RedBot):
             self.TIANSHUI()
         elif self.curr_state == STATE.BAIT_TRUE:
             self.BAIT_TRUE()
-        # elif self.curr_state == STATE.EVADE:
-        #     self.evadeBots()
         elif self.curr_state == STATE.BAO:
             self.BAO()
         elif self.curr_state == STATE.JAIL:
@@ -87,13 +85,12 @@ class Red5(RedBot):
             self.drive_forward(Globals.FAST)
         elif self.has_flag:
             i = self.angleRelative(Globals.red_bots[0].x, Globals.red_bots[0].y)
-            if i < 0 or i > 40:
+            if i < 0 or i > 50:
                 self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         else:
             print("PASS, RED5 BAO()")
-        # else:
-        #     self.curr_state = STATE.EVADE
+
 
     # * Jail state
     def JAIL(self):
@@ -108,6 +105,7 @@ class Red5(RedBot):
             self.turn_right(Globals.FAST)
         else:
             self.turn_left(Globals.FAST)
+
         # Driving forward
         self.drive_forward(Globals.FAST)
     

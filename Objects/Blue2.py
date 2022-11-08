@@ -6,7 +6,7 @@ class STATE(Enum):
     WAIT = 0
     ATTACK = 1
     JAILBREAK = 2
-    RETURN = 3
+    RETURN = 2
 
 class Blue2(BlueBot):
     def __init__(self, room, x, y):
@@ -36,7 +36,7 @@ class Blue2(BlueBot):
             self.curr_state = STATE.ATTACK
         else:
             bot_jailed = False
-            for team_bot in Globals.red_bots:
+            for team_bot in Globals.blue_bots:
                 if team_bot.jailed:
                     bot_jailed = True
                     break

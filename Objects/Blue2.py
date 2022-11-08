@@ -61,8 +61,8 @@ class Blue2(BlueBot):
         if not bot_jailed:
             self.curr_state = STATE.RETURN
         else:
-            angle = self.angleRelative(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT)
-            self.turn_towards(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT, Globals.FAST)
+            angle = self.angleRelative(0,0)
+            self.turn_towards(0,0, Globals.FAST)
             if angle <120:
                 self.drive_forward(Globals.FAST)
 
@@ -77,10 +77,10 @@ class Blue2(BlueBot):
             self.curr_state = STATE.WAIT
 
     def closest_enemy_to_flag(self):
-        closest_bot = Globals.blue_bots[0]
+        closest_bot = Globals.red_bots[0]
         shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
                                                          self.psuedoflagx, Globals.red_flag.y)
-        for curr_bot in Globals.blue_bots:
+        for curr_bot in Globals.red_bots:
             curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
                                                          self.psuedoflagx, Globals.red_flag.y)
             if curr_bot_dist < shortest_distance:

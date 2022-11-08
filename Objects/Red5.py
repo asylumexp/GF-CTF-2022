@@ -104,10 +104,10 @@ class Red5(RedBot):
     # * Evade state
     def evadeBots(self):
         closest_enemy, null = self.closest_enemy_to_bot()
-        if self.angleRelative(closest_enemy.x,closest_enemy.y)>0:
-            self.turn_right(Globals.MEDIUM)
+        if self.angleRelative(closest_enemy.x,closest_enemy.y)<0:
+            self.turn_right(Globals.FAST)
         else:
-            self.turn_left(Globals.MEDIUM)
+            self.turn_left(Globals.FAST)
         # Driving forward
         self.drive_forward(Globals.FAST)
     

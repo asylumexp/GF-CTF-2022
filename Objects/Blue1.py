@@ -11,8 +11,10 @@ class STATE(Enum):
 class Blue1(BlueBot):
     def __init__(self, room, x, y):
         BlueBot.__init__(self, room, x, y)
-
         self.curr_state = STATE.WAIT
+        self.bot3ready = False
+        self.bot4ready = False
+        self.bot5ready = False
 
     def tick(self):
 

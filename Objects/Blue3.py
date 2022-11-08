@@ -89,7 +89,7 @@ class Blue3(BlueBot):
         angle=abs(self.angleRelative(bot.x,bot.y))
         if self.x <= 50 and self.y < 100:
             self.JAIL()
-        elif angle<60 and distance<100 and not self.has_flag:
+        elif angle<90 and distance<100 and not self.has_flag:
             self.evadeBots()
         elif not self.has_flag:
             self.turn_towards(Globals.blue_flag.x, Globals.blue_flag.y, Globals.FAST)
@@ -114,9 +114,9 @@ class Blue3(BlueBot):
     def evadeBots(self):
         closest_enemy, null = self.closest_enemy_to_bot()
         if self.angleRelative(closest_enemy.x,closest_enemy.y)>0:
-            self.turn_right(Globals.MEDIUM)
+            self.turn_right(Globals.FAST)
         else:
-            self.turn_left(Globals.MEDIUM)
+            self.turn_left(Globals.FAST)
         # Driving forward
         self.drive_forward(Globals.FAST)
     

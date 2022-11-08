@@ -65,7 +65,7 @@ class Blue5(BlueBot):
         # ? move across border, evading enemies
         if self.x <= 50 and self.y < 100:
             self.jailedf()
-        elif angle<60 and distance<200 and not self.has_flag:
+        elif angle<90 and distance<200 and not self.has_flag:
             self.evadeBots()
         elif not self.has_flag:
             self.turn_towards(Globals.blue_flag.x, Globals.blue_flag.y, Globals.FAST)
@@ -128,9 +128,9 @@ class Blue5(BlueBot):
     def evadeBots(self):
         closest_enemy, dist = self.closest_enemy_to_self(True)
         if self.angleRelative(closest_enemy.x,closest_enemy.y)<0:
-            self.turn_right(Globals.MEDIUM)
+            self.turn_right(Globals.FAST)
         else:
-            self.turn_left(Globals.MEDIUM)
+            self.turn_left(Globals.FAST)
         # Driving forward
         self.drive_forward(Globals.FAST)
         

@@ -15,6 +15,8 @@ class Blue2(BlueBot):
         self.curr_state = STATE.RETURN
 
     def tick(self):
+        if self.x > 620:
+            self.curr_state == STATE.RETURN
         # Lame declaring outside init becuz of weird glitch with gameframe
         self.psuedoflagx=Globals.red_flag.x+250
         if self.curr_state == STATE.WAIT:

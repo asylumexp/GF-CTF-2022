@@ -15,7 +15,6 @@ class STATE(Enum):
 class Blue4(BlueBot):
     def __init__(self, room, x, y):
         BlueBot.__init__(self, room, x, y)
-        self.set_image("Images/master.png", 25, 25)
         self.curr_state = STATE.WAIT
 
     def tick(self):

@@ -11,8 +11,6 @@ class STATE(Enum):
 class Blue2(BlueBot):
     def __init__(self, room, x, y):
         BlueBot.__init__(self, room, x, y)
-        image = self.load_image("Red2.png")
-        self.set_image(image, 25, 25)
 
         self.curr_state = STATE.RETURN
 

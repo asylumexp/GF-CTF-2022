@@ -11,8 +11,6 @@ class STATE(Enum):
 class Red2(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
-        image = self.load_image("Red2.png")
-        self.set_image(image, 25, 25)
 
         self.curr_state = STATE.RETURN
 

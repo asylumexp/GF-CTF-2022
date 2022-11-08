@@ -14,7 +14,6 @@ class STATE(Enum):
 class Red4(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
-        self.set_image("Images/master.png", 25, 25)
         self.curr_state = STATE.WAIT
 
     def tick(self):

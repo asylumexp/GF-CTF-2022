@@ -11,14 +11,13 @@ class STATE(Enum):
 class Red2(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
-        image = self.load_image("Red2.png")
-        self.set_image(image, 25, 25)
-
         self.curr_state = STATE.RETURN
 
     def tick(self):
         # Lame declaring outside init becuz of weird glitch with gameframe
         self.psuedoflagx=Globals.blue_flag.x-250
+        if self.x < 660:
+            self.curr_state == STATE.RETURN
         if self.curr_state == STATE.WAIT:
             self.wait()
         elif self.curr_state == STATE.ATTACK:

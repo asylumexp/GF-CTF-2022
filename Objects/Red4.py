@@ -36,7 +36,7 @@ class Red4(RedBot):
     def wait(self):
         bot, distance = self.closest_enemy_to_flag()
         # todo Check for enemies
-        if distance < 250 and bot.x > 650:
+        if distance < 250:
            self.attack()
         # * Stay and or move close to the top border
         if self.x <= 644 or self.x >= 656:
@@ -50,9 +50,8 @@ class Red4(RedBot):
         bot, distance = self.closest_enemy_to_flag()
         # todo Check for enemies
         Globals.red_bots[0].bot4ready = True
-        if distance < 250 and bot.x > 650:
-           self.attack()
-           self.curr_state = STATE.WAIT
+        if distance < 250:
+           self.curr_state = STATE.ATTACK
         elif Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot5ready:
             self.curr_state = STATE.BAIT
 
@@ -98,11 +97,19 @@ class Red4(RedBot):
         self.drive_forward(Globals.FAST)
 
     def attack(self):
-        bot, distance = self.closest_enemy_to_flag()
-        if distance < 250:
-            Globals.red_bots[0].bot4ready = False
-            self.turn_towards(bot.x, bot.y, Globals.FAST)
-            self.drive_forward(Globals.FAST)
+        bot, dista = self.closest_enemy_to_flag()
+        print(dista, bot)
+        # todo - attack bots
+        if dista <= 200 and bot.x > 650:
+            if dista < 200:
+                i = self.angleRelative(bot.x + 30, bot.y)
+                print(i)
+                if i < 0 or i > 40:
+                    self.turn_towards(bot.x + 30, bot.y, Globals.FAST)
+                else:
+                    self.drive_forward(Globals.FAST)
+        elif dista > 300:
+            self.curr_state = STATE.WAIT
 
     def closest_enemy_to_flag(self):
         closest_bot = Globals.blue_bots[0]

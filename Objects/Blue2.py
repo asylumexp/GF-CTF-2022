@@ -30,7 +30,7 @@ class Blue2(BlueBot):
 
     def wait(self):
         bot, distance = self.closest_enemy_to_flag()
-        if distance < 250:
+        if distance < 200:
             self.curr_state = STATE.ATTACK
         else:
             bot_jailed = False

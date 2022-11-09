@@ -66,7 +66,7 @@ class Blue4(BlueBot):
         if self.x <= 200 and self.y <= 200:
             self.curr_state = STATE.JAIL
         # ? move across border, evading enemies
-        elif angle<90 and distance<200 and not self.has_flag:
+        elif angle<90 and distance<200 and not self.has_flag and self.point_to_point_distance(self.x,self.y,Globals.blue_flag.x,Globals.blue_flag.y)>150:
             self.evadeBots()
         elif not self.has_flag:
             self.turn_towards(Globals.blue_flag.x, Globals.blue_flag.y, Globals.FAST)

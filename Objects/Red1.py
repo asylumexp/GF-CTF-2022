@@ -8,7 +8,6 @@ class STATE(Enum):
     CHILL = 1
     STRIKE = 2
     FLAGRETURN = 3
-    TURNTOFLAG = 4
 
 class Red1(RedBot):
     def __init__(self, room, x, y):
@@ -23,12 +22,12 @@ class Red1(RedBot):
 
         if self.curr_state == STATE.FLAGRETURN:
             self.flagreturn()
-        if self.curr_state == STATE.CHILL:
+        elif self.curr_state == STATE.CHILL:
             self.wait()
-        if self.curr_state == STATE.STRIKE:
-             self.STRIKE()
-        if self.curr_state == STATE.TURNTOFLAG:
-            self.turntoflag()
+        elif self.curr_state == STATE.STRIKE:
+            self.STRIKE()
+        else:
+            self.curr_state = STATE.CHILL
 
     def flagreturn(self):
         bot, distance = self.closest_enemy_to_flag()
@@ -64,9 +63,6 @@ class Red1(RedBot):
                     self.drive_forward(Globals.FAST)
             else:
                 self.curr_state=STATE.FLAGRETURN
-
-    def turntoflag(self):
-        pass
 
     def closest_enemy_to_flag(self):
         closest_bot = Globals.blue_bots[0]

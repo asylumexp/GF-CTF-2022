@@ -17,7 +17,7 @@ class Blue3(BlueBot):
         self.curr_state = STATE.TIANSHUI
 
     def tick(self):
-        print(self.curr_state, self.x, self.y)
+        #print(self.curr_state, self.x, self.y)
         # * States
         if self.curr_state == STATE.PINQLIANG:
             self.PINQLIANG()
@@ -55,7 +55,7 @@ class Blue3(BlueBot):
         if dista <= 200 and bot.x < 650:
             if dista < 200 and dista > 100:
                 i = self.angleRelative(bot.x + 30, bot.y)
-                print(i)
+                #print(i)
                 if i < 0 or i > 40:
                     self.turn_towards(bot.x + 30, bot.y, Globals.FAST)
                 else:
